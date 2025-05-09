@@ -9,9 +9,10 @@ export default async function ({
 }: {
   defaultConfig: NextConfig;
 }): Promise<NextConfig> {
-  initOpenNextCloudflareForDev(); 
+  await initOpenNextCloudflareForDev();
 
-  const ROOT = getCloudflareContext().env.NEXT_PUBLIC_ROOT_DOMAIN || "searchlysis.com";
+  const ROOT =
+    getCloudflareContext().env.NEXT_PUBLIC_ROOT_DOMAIN || "searchlysis.com";
   const allowedOrigins = [ROOT, `*.${ROOT}`];
 
   const nextConfig: NextConfig = {
