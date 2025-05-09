@@ -20,10 +20,8 @@ const nextConfig: NextConfig = {
   experimental: {
     serverActions: {
       allowedOrigins: [
-        "searchlysis.com",
-        "*.searchlysis.com",
-        getCloudflareContext().env.NEXT_PUBLIC_ROOT_DOMAIN || "localhost",
-        `*.${getCloudflareContext().env.NEXT_PUBLIC_ROOT_DOMAIN || "localhost"}`,
+        getCloudflareContext().env.NEXT_PUBLIC_ROOT_DOMAIN || "searchlysis.com",
+        `*.${getCloudflareContext().env.NEXT_PUBLIC_ROOT_DOMAIN || ".searchlysis.com"}`,
       ],
     },
   },
