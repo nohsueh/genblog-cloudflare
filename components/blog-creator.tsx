@@ -247,7 +247,7 @@ ${CHINESE_RESPONSE_PROMPT}`;
                     id="search-query"
                     name="query"
                     placeholder={`e.g., ai news`}
-                    defaultValue={`site:${getCloudflareContext().env.NEXT_PUBLIC_ROOT_DOMAIN}`}
+                    defaultValue={`site:${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`}
                     disabled={isLoading}
                     required
                   />
@@ -400,7 +400,7 @@ ${CHINESE_RESPONSE_PROMPT}`;
                   <Textarea
                     id="link-url"
                     name="link"
-                    placeholder={`https://${getCloudflareContext().env.NEXT_PUBLIC_ROOT_DOMAIN}/article1\nhttps://${getCloudflareContext().env.NEXT_PUBLIC_ROOT_DOMAIN}/article2\nhttps://${getCloudflareContext().env.NEXT_PUBLIC_ROOT_DOMAIN}/article3`}
+                    placeholder={`https://${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/article1\nhttps://${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/article2\nhttps://${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/article3`}
                     rows={4}
                     disabled={isLoading}
                     required

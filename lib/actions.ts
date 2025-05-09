@@ -12,9 +12,9 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 const API_URL = "https://searchlysis.com/api";
-const API_KEY = getCloudflareContext().env.SEARCHLYSIS_API_KEY;
-const ADMIN_TOKEN = getCloudflareContext().env.PASSWORD;
-const SESSION_COOKIE_NAME = `__Secure-${getCloudflareContext().env.NEXT_PUBLIC_BASE_PATH}`;
+const API_KEY = process.env.SEARCHLYSIS_API_KEY;
+const ADMIN_TOKEN = process.env.PASSWORD;
+const SESSION_COOKIE_NAME = `__Secure-${process.env.NEXT_PUBLIC_BASE_PATH}`;
 const SESSION_EXPIRY = 60 * 60 * 24 * 30; // 30 days
 
 if (!API_KEY) {
@@ -58,7 +58,7 @@ export async function validateAdmin(formData: FormData) {
       name: SESSION_COOKIE_NAME,
       value: token,
       httpOnly: true,
-      secure: getCloudflareContext().env.NODE_ENV === "prod",
+      secure: process.env.NODE_ENV === "prod",
       maxAge: SESSION_EXPIRY,
       path: "/",
     });

@@ -44,20 +44,20 @@ export function SiteHeader({
           <div className="flex flex-shrink-0 flex-row items-center md:space-x-2 lg:space-x-6">
             <Link
               href={
-                `https://${getCloudflareContext().env.NEXT_PUBLIC_ROOT_DOMAIN}` ||
+                `https://${process.env.NEXT_PUBLIC_ROOT_DOMAIN}` ||
                 `/${lang}`
               }
               className="flex flex-row items-center space-x-1"
             >
               <Image
-                alt={getCloudflareContext().env.NEXT_PUBLIC_APP_NAME || ""}
+                alt={process.env.NEXT_PUBLIC_APP_NAME || ""}
                 src="/icon.svg"
                 width={40}
                 height={40}
                 priority={true}
               />
               <span className="hidden font-bold whitespace-nowrap md:block">
-                {getCloudflareContext().env.NEXT_PUBLIC_APP_NAME}
+                {process.env.NEXT_PUBLIC_APP_NAME}
               </span>
             </Link>
             <nav className="hidden flex-shrink-0 md:flex md:items-center md:space-x-2 lg:space-x-6">

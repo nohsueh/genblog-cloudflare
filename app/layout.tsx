@@ -9,19 +9,19 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {getCloudflareContext().env.NEXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT && (
+        {process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT && (
           <script
             id="google-adsense-script"
             async
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-${getCloudflareContext().env.NEXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT}`}
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-${process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT}`}
             crossOrigin="anonymous"
           ></script>
         )}
-        {getCloudflareContext().env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION && (
+        {process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION && (
           <meta
             name="google-site-verification"
             content={
-              getCloudflareContext().env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+              process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
             }
           />
         )}

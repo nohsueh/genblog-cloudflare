@@ -10,20 +10,20 @@ export function SiteFooter() {
       <div className="container flex flex-col items-center justify-between gap-4 md:h-16 md:flex-row">
         <div className="flex flex-col items-center gap-4 md:h-16 md:flex-row">
           <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
-            © {new Date().getFullYear()} {getCloudflareContext().env.NEXT_PUBLIC_APP_NAME}
+            © {new Date().getFullYear()} {process.env.NEXT_PUBLIC_APP_NAME}
           </p>
           <div className="flex flex-row">
             <Link href={"https://github.com/nohsueh/genblog"} target="_blank">
               <Suspense fallback={<Skeleton className="size-6" />}>
                 <Image
-                  src={`${getCloudflareContext().env.NEXT_PUBLIC_BASE_PATH || ""}/github-mark.svg`}
+                  src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/github-mark.svg`}
                   alt="GitHub"
                   width={24}
                   height={24}
                   className="block dark:hidden"
                 />
                 <Image
-                  src={`${getCloudflareContext().env.NEXT_PUBLIC_BASE_PATH || ""}/github-mark-white.svg`}
+                  src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/github-mark-white.svg`}
                   alt="GitHub"
                   width={24}
                   height={24}

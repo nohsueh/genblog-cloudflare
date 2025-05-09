@@ -45,9 +45,9 @@ export async function generateMetadata({
   const { lang } = await params;
   const dictionary = await getDictionary(lang);
 
-  const title = getCloudflareContext().env.NEXT_PUBLIC_APP_NAME;
+  const title = process.env.NEXT_PUBLIC_APP_NAME;
   const description =
-    getCloudflareContext().env.NEXT_PUBLIC_APP_DESCRIPTION ||
+    process.env.NEXT_PUBLIC_APP_DESCRIPTION ||
     `${dictionary.home.title} - ${dictionary.home.description}`;
   const images = getDefaultImage();
 

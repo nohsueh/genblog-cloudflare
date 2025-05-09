@@ -1,37 +1,26 @@
-import {
-  getCloudflareContext,
-  initOpenNextCloudflareForDev,
-} from "@opennextjs/cloudflare";
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 import type { NextConfig } from "next";
 
-export default async function ({
-  defaultConfig,
-}: {
-  defaultConfig: NextConfig;
-}): Promise<NextConfig> {
-  await initOpenNextCloudflareForDev();
+initOpenNextCloudflareForDev();
 
-  const ROOT =
-    getCloudflareContext().env.NEXT_PUBLIC_ROOT_DOMAIN || "searchlysis.com";
-  const allowedOrigins = [ROOT, `*.${ROOT}`];
-
-  const nextConfig: NextConfig = {
-    ...defaultConfig,
-    basePath: getCloudflareContext().env.NEXT_PUBLIC_BASE_PATH || "",
-    images: {
-      remotePatterns: [
-        {
-          protocol: "https",
-          hostname: "**",
-        },
+const nextConfig: NextConfig = {
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH || "",
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+    ],
+  },
+  experimental: {
+    serverActions: {
+      allowedOrigins: [
+        process.env.NEXT_PUBLIC_ROOT_DOMAIN || "searchlysis.com",
+        `*.${process.env.NEXT_PUBLIC_ROOT_DOMAIN || "*.searchlysis.com"}`,
       ],
     },
-    experimental: {
-      serverActions: {
-        allowedOrigins,
-      },
-    },
-  };
+  },
+};
 
-  return nextConfig;
-}
+export default nextConfig;

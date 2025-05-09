@@ -54,7 +54,7 @@ export async function generateMetadata({
   const title =
     contentLines?.[0].replace(/^#+\s*/, "") +
     " - " +
-    getCloudflareContext().env.NEXT_PUBLIC_APP_NAME;
+    process.env.NEXT_PUBLIC_APP_NAME;
   const description = contentLines
     ?.slice(1)
     .find((line) => !line.startsWith("!["));
