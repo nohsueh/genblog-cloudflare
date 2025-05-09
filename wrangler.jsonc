@@ -1,0 +1,41 @@
+/**
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "genblog-cloudflare",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-03-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "binding": "ASSETS",
+    "directory": ".open-next/assets",
+  },
+  "observability": {
+    "enabled": true,
+  },
+  "placement": { "mode": "smart" },
+  "vars": {
+    "NODE_ENV": "dev",
+    "NEXT_PUBLIC_APP_NAME": "Your App Name",
+    "NEXT_PUBLIC_ROOT_DOMAIN": "example.com",
+    "NEXT_PUBLIC_BASE_PATH": "/path/to/your/blog",
+    "NEXT_PUBLIC_APP_DESCRIPTION": "Your App Description",
+    "NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION": "your-google-site-verification",
+    "NEXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT": "your-google-adsense-account",
+  },
+  "env": {
+    "prod": {
+      "vars": {
+        "NODE_ENV": "prod",
+        "NEXT_PUBLIC_APP_NAME": "Your App Name",
+        "NEXT_PUBLIC_ROOT_DOMAIN": "example.com",
+        "NEXT_PUBLIC_BASE_PATH": "/path/to/your/blog",
+        "NEXT_PUBLIC_APP_DESCRIPTION": "Your App Description",
+        "NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION": "your-google-site-verification",
+        "NEXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT": "your-google-adsense-account",
+      },
+    },
+  },
+}
