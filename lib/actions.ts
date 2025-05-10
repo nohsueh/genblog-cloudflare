@@ -67,6 +67,17 @@ export async function validateAdmin(formData: FormData) {
   }
 }
 
+export async function logoutAdmin() {
+  (await cookies()).set({
+    name: SESSION_COOKIE_NAME,
+    value: "",
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 0,
+    path: process.env.NEXT_PUBLIC_BASE_PATH,
+  });
+}
+
 export async function checkAdminSession() {
   const session = (await cookies()).get(SESSION_COOKIE_NAME);
   if (!session?.value) return false;
@@ -77,19 +88,9 @@ export async function checkAdminSession() {
     console.log({ decoded, ROLE, isAdmin: ROLE === decoded.role });
     return ROLE === decoded.role;
   } catch (err) {
+    console.error(`${err}`);
     return false;
   }
-}
-
-export async function logoutAdmin() {
-  (await cookies()).set({
-    name: SESSION_COOKIE_NAME,
-    value: "",
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 0,
-    path: process.env.NEXT_PUBLIC_BASE_PATH,
-  });
 }
 
 export async function requireAdmin(lang: string) {
