@@ -21,7 +21,6 @@
   },
   "placement": { "mode": "smart" },
   "vars": {
-    "NODE_ENV": "dev",
     "NEXT_PUBLIC_APP_NAME": "Your App Name",
     "NEXT_PUBLIC_ROOT_DOMAIN": "example.com",
     "NEXT_PUBLIC_BASE_PATH": "/path/to/your/blog",
@@ -32,7 +31,6 @@
   "env": {
     "production": {
       "vars": {
-        "NODE_ENV": "prod",
         "NEXT_PUBLIC_APP_NAME": "Your App Name",
         "NEXT_PUBLIC_ROOT_DOMAIN": "example.com",
         "NEXT_PUBLIC_BASE_PATH": "/path/to/your/blog",
