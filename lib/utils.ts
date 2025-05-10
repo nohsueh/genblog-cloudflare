@@ -59,3 +59,4 @@ export function getBaseUrl() {
 export function getDefaultImage() {
   return `${getBaseUrl()}/logo.svg`;
 }
+
