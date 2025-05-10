@@ -1,6 +1,7 @@
 import { getAnalysis } from "@/lib/actions";
 import type { Locale } from "@/lib/i18n-config";
 import { getBaseUrl, getDefaultImage } from "@/lib/utils";
+import { AnalysisResult } from "@/types/api";
 import { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 
@@ -12,15 +13,15 @@ type Props = {
 };
 
 export default async function BlogPage({ params }: { params: Promise<Props> }) {
+  const { lang, id } = await params;
+  let post: AnalysisResult;
   try {
-    const { lang, id } = await params;
-    const post = await getAnalysis(id);
-
-    redirect(`${getBaseUrl()}/${lang}/${id}/${post.slug || ""}`);
+    post = await getAnalysis(id);
   } catch (error) {
     console.error(error);
     return notFound();
   }
+  redirect(`${getBaseUrl()}/${lang}/${id}/${post.slug || ""}`);
 }
 
 export async function generateMetadata({
