@@ -37,7 +37,7 @@ export function SiteHeader({
   };
 
   return (
-    <header className="bg-background sticky top-0 z-50 w-full border-b">
+    <header className="sticky top-0 z-50 w-full border-b bg-background">
       <div className="container flex h-16 w-full items-center space-x-2 md:space-x-4">
         {!isSearching && (
           <div className="flex flex-shrink-0 flex-row items-center md:space-x-2 lg:space-x-6">
@@ -49,26 +49,26 @@ export function SiteHeader({
             >
               <Image
                 alt={process.env.NEXT_PUBLIC_APP_NAME || ""}
-                src="/icon.svg"
+                src={`${process.env.NEXT_PUBLIC_BASE_PATH}/icon.svg`}
                 width={40}
                 height={40}
                 priority={true}
               />
-              <span className="hidden font-bold whitespace-nowrap md:block">
+              <span className="hidden whitespace-nowrap font-bold md:block">
                 {process.env.NEXT_PUBLIC_APP_NAME}
               </span>
             </Link>
             <nav className="hidden flex-shrink-0 md:flex md:items-center md:space-x-2 lg:space-x-6">
               <Link
                 href={`/${lang}`}
-                className="text-muted-foreground hover:text-primary focus:text-primary active:text-primary text-sm font-medium transition-colors"
+                className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary focus:text-primary active:text-primary"
               >
                 {dictionary.header.home}
               </Link>
               {isAdmin && (
                 <Link
                   href={`/${lang}/console`}
-                  className="text-muted-foreground hover:text-primary focus:text-primary active:text-primary text-sm font-medium transition-colors"
+                  className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary focus:text-primary active:text-primary"
                 >
                   {dictionary.header.dashboard}
                 </Link>
@@ -106,14 +106,14 @@ export function SiteHeader({
                 <nav className="mt-4 flex flex-col gap-4">
                   <Link
                     href={`/${lang}`}
-                    className="hover:text-primary focus:text-primary active:text-primary text-sm font-medium transition-colors"
+                    className="text-sm font-medium transition-colors hover:text-primary focus:text-primary active:text-primary"
                   >
                     {dictionary.header.home}
                   </Link>
                   {isAdmin && (
                     <Link
                       href={`/${lang}/console`}
-                      className="hover:text-primary focus:text-primary active:text-primary text-sm font-medium transition-colors"
+                      className="text-sm font-medium transition-colors hover:text-primary focus:text-primary active:text-primary"
                     >
                       {dictionary.header.dashboard}
                     </Link>

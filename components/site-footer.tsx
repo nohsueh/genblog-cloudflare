@@ -15,14 +15,14 @@ export function SiteFooter() {
             <Link href={"https://github.com/nohsueh/genblog"} target="_blank">
               <Suspense fallback={<Skeleton className="size-6" />}>
                 <Image
-                  src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/github-mark.svg`}
+                  src={`${process.env.NEXT_PUBLIC_BASE_PATH}/github-mark.svg`}
                   alt="GitHub"
                   width={24}
                   height={24}
                   className="block dark:hidden"
                 />
                 <Image
-                  src={`${process.env.NEXT_PUBLIC_BASE_PATH || ""}/github-mark-white.svg`}
+                  src={`${process.env.NEXT_PUBLIC_BASE_PATH}/github-mark-white.svg`}
                   alt="GitHub"
                   width={24}
                   height={24}
