@@ -5,7 +5,6 @@ import { checkAdminSession } from "@/lib/actions";
 import { getDictionary } from "@/lib/dictionaries";
 import type { Locale } from "@/lib/i18n-config";
 import { getBaseUrl, getDefaultImage, getGroupName } from "@/lib/utils";
-import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { Metadata } from "next";
 
 export const revalidate = 3600;

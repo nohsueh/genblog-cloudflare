@@ -6,7 +6,6 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { logoutAdmin } from "@/lib/actions";
 import type { Locale } from "@/lib/i18n-config";
 import { getBaseUrl } from "@/lib/utils";
-import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { EllipsisVertical, LogOut } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -44,8 +43,7 @@ export function SiteHeader({
           <div className="flex flex-shrink-0 flex-row items-center md:space-x-2 lg:space-x-6">
             <Link
               href={
-                `https://${process.env.NEXT_PUBLIC_ROOT_DOMAIN}` ||
-                `/${lang}`
+                `https://${process.env.NEXT_PUBLIC_ROOT_DOMAIN}` || `/${lang}`
               }
               className="flex flex-row items-center space-x-1"
             >

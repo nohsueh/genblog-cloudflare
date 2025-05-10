@@ -5,7 +5,6 @@ import { checkAdminSession, getAnalysis } from "@/lib/actions";
 import { getDictionary } from "@/lib/dictionaries";
 import type { Locale } from "@/lib/i18n-config";
 import { getBaseUrl, getDefaultImage } from "@/lib/utils";
-import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 

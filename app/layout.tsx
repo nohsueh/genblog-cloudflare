@@ -1,4 +1,3 @@
-import { getCloudflareContext } from "@opennextjs/cloudflare";
 import "./globals.css";
 
 export default function RootLayout({

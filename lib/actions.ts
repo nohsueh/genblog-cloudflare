@@ -6,7 +6,6 @@ import type {
   AnalyzeResults,
   AnalyzeSearchParams,
 } from "@/types/api";
-import { getCloudflareContext } from "@opennextjs/cloudflare";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -58,7 +57,7 @@ export async function validateAdmin(formData: FormData) {
       name: SESSION_COOKIE_NAME,
       value: token,
       httpOnly: true,
-      secure: process.env.NODE_ENV === "prod",
+      secure: process.env.NODE_ENV === "production",
       maxAge: SESSION_EXPIRY,
       path: "/",
     });
