@@ -58,7 +58,9 @@ export async function validateAdmin(formData: FormData) {
     (await cookies()).set({
       name: COOKIE_NAME,
       value: token,
+      httpOnly: true,
       secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
       maxAge: COOKIE_EXPIRY,
       path: new URL(getBaseUrl()).pathname,
     });

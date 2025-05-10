@@ -61,8 +61,5 @@ export function getDefaultImage() {
 }
 
 export function encode(data: string) {
-  btoa(new URL(getBaseUrl()).pathname)
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=+$/, "");
+  btoa(data).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
