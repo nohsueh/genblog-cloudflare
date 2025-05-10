@@ -74,7 +74,8 @@ export async function checkAdminSession() {
   try {
     // Verify JWT token
     const decoded = jwt.verify(session.value, ADMIN_TOKEN) as JWTPayload;
-    return decoded.role === ROLE;
+    console.log({ decoded, ROLE, isAdmin: ROLE === decoded.role });
+    return ROLE === decoded.role;
   } catch (err) {
     return false;
   }
