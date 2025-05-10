@@ -61,7 +61,6 @@ export async function validateAdmin(formData: FormData) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       maxAge: COOKIE_EXPIRY,
-      path: new URL(getBaseUrl()).pathname,
     });
   } else {
     throw new Error("Invalid password");
@@ -76,6 +75,7 @@ export async function checkAdminCookie() {
   try {
     const cookie = (await cookies()).get(COOKIE_NAME);
     if (!cookie?.value) {
+      console.error({ COOKIE_NAME, cookie: cookie || "No value" });
       return false;
     }
 
@@ -85,6 +85,7 @@ export async function checkAdminCookie() {
     ) as JWTPayload;
     return ROLE === decoded.role;
   } catch (err) {
+    console.error(`${err}`);
     return false;
   }
 }
