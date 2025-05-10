@@ -69,7 +69,7 @@ export async function generateMetadata({
       res.ok && contentType.startsWith("image")
         ? (post.analysis?.image as string)
         : getDefaultImage();
-  } catch (err) {
+  } catch {
     images = getDefaultImage();
   }
 

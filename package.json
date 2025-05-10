@@ -2,7 +2,6 @@
   "name": "genblog-cloudflare",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -84,7 +83,6 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250509.0",
-    "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
