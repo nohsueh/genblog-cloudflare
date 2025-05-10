@@ -59,8 +59,9 @@ export async function validateAdmin(formData: FormData) {
       value: token,
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
       maxAge: SESSION_EXPIRY,
-      path: process.env.NEXT_PUBLIC_BASE_PATH,
+      path: process.env.NEXT_PUBLIC_BASE_PATH || "",
     });
   } else {
     throw new Error("Invalid password");
@@ -73,30 +74,27 @@ export async function logoutAdmin() {
     value: "",
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
     maxAge: 0,
-    path: process.env.NEXT_PUBLIC_BASE_PATH,
+    path: process.env.NEXT_PUBLIC_BASE_PATH || "",
   });
 }
 
 export async function checkAdminSession() {
   const session = (await cookies()).get(SESSION_COOKIE_NAME);
-  console.error({ SESSION_COOKIE_NAME, session });
   if (!session?.value) return false;
 
   try {
     // Verify JWT token
     const decoded = jwt.verify(session.value, ADMIN_TOKEN) as JWTPayload;
-    console.error({ decoded, ROLE, isAdmin: ROLE === decoded.role });
     return ROLE === decoded.role;
   } catch (err) {
-    console.error(`${err}`);
     return false;
   }
 }
 
 export async function requireAdmin(lang: string) {
   const isAdmin = await checkAdminSession();
-  console.error({ isAdmin });
   if (!isAdmin) {
     redirect(`/${lang}/console`);
   }
