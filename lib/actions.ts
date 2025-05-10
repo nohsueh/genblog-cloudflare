@@ -15,7 +15,7 @@ const API_URL = "https://searchlysis.com/api";
 const ROLE = "admin";
 const API_KEY = process.env.SEARCHLYSIS_API_KEY;
 const ADMIN_TOKEN = process.env.PASSWORD;
-const SESSION_COOKIE_NAME = `__Secure-${getBaseUrl()}`;
+const SESSION_COOKIE_NAME = `__Secure-${btoa(getBaseUrl())}`;
 const SESSION_EXPIRY = 60 * 60 * 24 * 7; // 7 days
 
 if (!API_KEY) {
@@ -25,7 +25,6 @@ if (!API_KEY) {
 if (!ADMIN_TOKEN) {
   throw new Error("PASSWORD is not defined");
 }
-const JWT_SECRET = ADMIN_TOKEN;
 
 interface JWTPayload {
   role: string;
@@ -48,7 +47,7 @@ export async function validateAdmin(formData: FormData) {
         role: ROLE,
         iat: Math.floor(Date.now() / 1000),
       },
-      JWT_SECRET,
+      ADMIN_TOKEN,
       {
         expiresIn: SESSION_EXPIRY,
       },
@@ -61,7 +60,7 @@ export async function validateAdmin(formData: FormData) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       maxAge: SESSION_EXPIRY,
-      path: "/",
+      path: process.env.NEXT_PUBLIC_BASE_PATH,
     });
   } else {
     throw new Error("Invalid password");
@@ -74,7 +73,7 @@ export async function checkAdminSession() {
 
   try {
     // Verify JWT token
-    const decoded = jwt.verify(session.value, JWT_SECRET) as JWTPayload;
+    const decoded = jwt.verify(session.value, ADMIN_TOKEN) as JWTPayload;
     return decoded.role === ROLE;
   } catch (err) {
     return false;
@@ -82,7 +81,14 @@ export async function checkAdminSession() {
 }
 
 export async function logoutAdmin() {
-  (await cookies()).delete(SESSION_COOKIE_NAME);
+  (await cookies()).set({
+    name: SESSION_COOKIE_NAME,
+    value: "",
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 0,
+    path: process.env.NEXT_PUBLIC_BASE_PATH,
+  });
 }
 
 export async function requireAdmin(lang: string) {
