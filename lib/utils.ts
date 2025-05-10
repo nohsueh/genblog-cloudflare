@@ -60,3 +60,9 @@ export function getDefaultImage() {
   return `${getBaseUrl()}/logo.svg`;
 }
 
+export function encode(data: string) {
+  btoa(new URL(getBaseUrl()).pathname)
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+}
