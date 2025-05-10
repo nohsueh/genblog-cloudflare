@@ -15,6 +15,14 @@ const API_KEY = process.env.SEARCHLYSIS_API_KEY;
 const ADMIN_TOKEN = process.env.PASSWORD;
 const SESSION_COOKIE_NAME = `__Secure-${process.env.NEXT_PUBLIC_BASE_PATH}`;
 const SESSION_EXPIRY = 60 * 60 * 24 * 7; // 7 days
+
+if (!API_KEY) {
+  throw new Error("SEARCHLYSIS_API_KEY is not defined");
+}
+
+if (!ADMIN_TOKEN) {
+  throw new Error("PASSWORD is not defined");
+}
 const JWT_SECRET = ADMIN_TOKEN;
 
 interface JWTPayload {
@@ -25,7 +33,7 @@ interface JWTPayload {
 
 const headers = {
   "Content-Type": "application/json",
-  "x-api-key": API_KEY || "",
+  "x-api-key": API_KEY,
 };
 
 export async function validateAdmin(formData: FormData) {
