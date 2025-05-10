@@ -80,12 +80,13 @@ export async function logoutAdmin() {
 
 export async function checkAdminSession() {
   const session = (await cookies()).get(SESSION_COOKIE_NAME);
+  console.error({ SESSION_COOKIE_NAME, session });
   if (!session?.value) return false;
 
   try {
     // Verify JWT token
     const decoded = jwt.verify(session.value, ADMIN_TOKEN) as JWTPayload;
-    console.log({ decoded, ROLE, isAdmin: ROLE === decoded.role });
+    console.error({ decoded, ROLE, isAdmin: ROLE === decoded.role });
     return ROLE === decoded.role;
   } catch (err) {
     console.error(`${err}`);
@@ -95,7 +96,7 @@ export async function checkAdminSession() {
 
 export async function requireAdmin(lang: string) {
   const isAdmin = await checkAdminSession();
-  console.log({ isAdmin });
+  console.error({ isAdmin });
   if (!isAdmin) {
     redirect(`/${lang}/console`);
   }
