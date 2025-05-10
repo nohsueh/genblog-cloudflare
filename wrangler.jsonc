@@ -20,24 +20,4 @@
     "enabled": true,
   },
   "placement": { "mode": "smart" },
-  "vars": {
-    "NEXT_PUBLIC_APP_NAME": "Your App Name",
-    "NEXT_PUBLIC_ROOT_DOMAIN": "example.com",
-    "NEXT_PUBLIC_BASE_PATH": "/path/to/your/blog",
-    "NEXT_PUBLIC_APP_DESCRIPTION": "Your App Description",
-    "NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION": "your-google-site-verification",
-    "NEXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT": "your-google-adsense-account",
-  },
-  "env": {
-    "production": {
-      "vars": {
-        "NEXT_PUBLIC_APP_NAME": "Your App Name",
-        "NEXT_PUBLIC_ROOT_DOMAIN": "example.com",
-        "NEXT_PUBLIC_BASE_PATH": "/path/to/your/blog",
-        "NEXT_PUBLIC_APP_DESCRIPTION": "Your App Description",
-        "NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION": "your-google-site-verification",
-        "NEXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT": "your-google-adsense-account",
-      },
-    },
-  },
 }
