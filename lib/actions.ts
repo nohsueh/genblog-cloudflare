@@ -181,7 +181,7 @@ export async function getAnalysis(analysisId: string): Promise<AnalysisResult> {
     {
       headers,
       next: {
-        revalidate: 2,
+        revalidate: 3600,
       },
     },
   );
@@ -258,7 +258,7 @@ export async function listAnalyses(
   const response = await fetch(url, {
     headers,
     next: {
-      revalidate: 2,
+      revalidate: 3600,
     },
   });
 
@@ -285,7 +285,7 @@ export async function listAnalysesIds(
   const response = await fetch(url, {
     headers,
     next: {
-      revalidate: 2,
+      revalidate: 3600,
     },
   });
 
@@ -313,7 +313,7 @@ export async function relatedAnalyses(
   const response = await fetch(url, {
     headers,
     next: {
-      revalidate: 2,
+      revalidate: 3600,
     },
   });
 
@@ -349,7 +349,7 @@ async function getTotalBlogs(metadata?: Record<string, any>): Promise<number> {
   const response = await fetch(url, {
     headers,
     next: {
-      revalidate: 2,
+      revalidate: 3600,
     },
   });
 
