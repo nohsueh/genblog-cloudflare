@@ -16,10 +16,6 @@ type Props = {
   slug: String;
 };
 
-export async function generateStaticParams() {
-  return []
-}
-
 export default async function BlogPage({ params }: { params: Promise<Props> }) {
   try {
     const { lang, id } = await params;
