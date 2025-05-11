@@ -12,6 +12,10 @@ type Props = {
   id: string;
 };
 
+export async function generateStaticParams() {
+  return [];
+}
+
 export default async function BlogPage({ params }: { params: Promise<Props> }) {
   const { lang, id } = await params;
   let post: AnalysisResult;
