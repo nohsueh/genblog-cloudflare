@@ -63,3 +63,14 @@ export function getDefaultImage() {
 export function encode(data: string) {
   return btoa(data).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
+
+export function getAppType(): "blog" | "directory" {
+  switch (process.env.NEXT_PUBLIC_APP_TYPE) {
+    case "blog":
+      return "blog";
+    case "directory":
+      return "directory";
+    default:
+      return "blog";
+  }
+}

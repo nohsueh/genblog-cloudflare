@@ -43,9 +43,6 @@ next-env.d.ts
 .wrangler
 .dev.vars*
 
-# prettier
-.prettierrc
-
 # editor
 .vscode
 .idea
