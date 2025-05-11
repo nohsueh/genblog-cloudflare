@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import "./globals.css";
 
 export default function RootLayout({
@@ -19,13 +20,13 @@ export default function RootLayout({
         {process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION && (
           <meta
             name="google-site-verification"
-            content={
-              process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
-            }
+            content={process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION}
           />
         )}
       </head>
-      <body>{children}</body>
+      <body>
+        <Suspense fallback={<></>}>{children}</Suspense>
+      </body>
     </html>
   );
 }
