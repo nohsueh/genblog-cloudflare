@@ -8,8 +8,13 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { relatedAnalyses } from "@/lib/actions";
 import type { Locale } from "@/lib/i18n-config";
-import { formatDate, getDefaultImage, getGroupName } from "@/lib/utils";
-import type { AnalysisResult } from "@/types/api";
+import {
+  extractContent,
+  formatDate,
+  getDefaultImage,
+  getGroupName,
+} from "@/lib/utils";
+import type { Analysis } from "@/types/api";
 import Link from "next/link";
 import { Suspense } from "react";
 import ImageWithFallback from "./image-with-fallback";
@@ -70,7 +75,7 @@ async function RelatedBlogListContent({
   dictionary,
   currentId,
 }: RelatedBlogListProps) {
-  let related: AnalysisResult[];
+  let related: Analysis[];
   try {
     related = await relatedAnalyses(1, POSTS_PER_PAGE, currentId, {
       group: getGroupName(),
@@ -80,22 +85,19 @@ async function RelatedBlogListContent({
     related = [];
   }
 
-  function renderCard(post: AnalysisResult) {
-    const contentLines = post.analysis?.content
-      ?.split("\n")
-      .map((line) => line.trim())
-      .filter((line) => line !== "");
+  function renderCard(post: Analysis) {
+    const articleLines = extractContent(post.jsonContent);
     const title =
-      contentLines?.[0].replace(/^#+\s*/, "") || post.analysis?.title || "";
-    const description = contentLines
+      articleLines[0].replace(/^#+\s+|\*+/g, "") || post.analysis.title || "";
+    const description = articleLines
       ?.slice(1)
       .find((line) => !line.startsWith("!["));
-    const image = post.analysis?.image || getDefaultImage();
-    const author = post.analysis?.author;
+    const image = post.analysis.image || getDefaultImage();
+    const author = post.analysis.author;
     const updatedAt = post.updatedAt;
 
     return (
-      <Link href={`/${lang}/${post.analysisId}/${post.slug || ""}`}>
+      <Link href={`/${lang}/${post.analysisId}/${post.jsonContent?.slug || ""}`}>
         <Card
           key={post.analysisId}
           className="flex flex-col overflow-hidden border-2 border-transparent transition-colors hover:border-primary/50 focus:border-primary/50 active:border-primary/50 dark:hover:bg-accent/50 dark:focus:bg-accent/50 dark:active:bg-accent/50"

@@ -16,7 +16,12 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { getPublishedBlogs } from "@/lib/actions";
 import type { Locale } from "@/lib/i18n-config";
-import { formatDate, getDefaultImage, getPaginationRange } from "@/lib/utils";
+import {
+  extractContent,
+  formatDate,
+  getDefaultImage,
+  getPaginationRange,
+} from "@/lib/utils";
 import Link from "next/link";
 import { Suspense } from "react";
 import ImageWithFallback from "./image-with-fallback";
@@ -38,39 +43,36 @@ async function BlogListContent({
 }: BlogListProps) {
   const currentPage = Number(searchParams.page || 1);
 
-  const { blogs: posts, total } = await getPublishedBlogs(
+  const { blogs, total } = await getPublishedBlogs(
     currentPage,
     PAGE_SIZE,
     group,
     lang,
   );
 
-  return posts.length === 0 ? (
+  return blogs.length === 0 ? (
     <div className="py-10 text-center">
       <p className="text-muted-foreground">{dictionary.blog.noBlogs}</p>
     </div>
   ) : (
     <div>
       <div className="grid sm:grid-cols-2 sm:gap-3 lg:grid-cols-3 lg:gap-6">
-        {posts.map((post) => {
-          const contentLines = post.analysis?.content
-            .split("\n")
-            .map((line) => line.trim())
-            .filter((line) => line !== "");
+        {blogs.map((post) => {
+          const articleLines = extractContent(post.jsonContent);
           const title =
-            contentLines?.[0].replace(/^#+\s*/, "") ||
-            post.analysis?.title ||
+            articleLines[0].replace(/^#+\s+|\*+/g, "") ||
+            post.analysis.title ||
             "No Title";
-          const description = contentLines
+          const description = articleLines
             ?.slice(1)
             .find((line) => !line.startsWith("!["));
-          const image = post.analysis?.image || getDefaultImage();
-          const author = post.analysis?.author;
+          const image = post.analysis.image || getDefaultImage();
+          const author = post.analysis.author;
           const updatedAt = post.updatedAt;
 
           return (
             <Link
-              href={`/${lang}/${post.analysisId}/${post.slug || ""}`}
+              href={`/${lang}/${post.analysisId}/${post.jsonContent?.slug || ""}`}
               key={post.analysisId}
             >
               <Card className="flex flex-col overflow-hidden border-2 border-transparent transition-colors hover:border-primary/50 focus:border-primary/50 active:border-primary/50 dark:hover:bg-accent/50 dark:focus:bg-accent/50 dark:active:bg-accent/50">
