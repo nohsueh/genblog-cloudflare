@@ -1,5 +1,3 @@
-import { LoaderCircle } from "lucide-react";
-import { Suspense } from "react";
 import "./globals.css";
 
 export default function RootLayout({
@@ -25,17 +23,7 @@ export default function RootLayout({
           />
         )}
       </head>
-      <body>
-        <Suspense
-          fallback={
-            <div className="flex h-[50vh] w-screen flex-col items-center justify-center">
-              <LoaderCircle className="size-10 animate-[spin_0.4s_linear_infinite]" />
-            </div>
-          }
-        >
-          {children}
-        </Suspense>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

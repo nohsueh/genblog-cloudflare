@@ -42,7 +42,6 @@ export function getPaginationRange(
   if (rightSibling < total - 1) {
     pages.push("...");
   }
-  pages.push(total);
   return pages;
 }
 
