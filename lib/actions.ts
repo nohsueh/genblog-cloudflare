@@ -5,6 +5,7 @@ import type {
   AnalyzeLinksParams,
   AnalyzeResults,
   AnalyzeSearchParams,
+  Content,
 } from "@/types/api";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
@@ -182,7 +183,7 @@ export async function getAnalysis(analysisId: string): Promise<Analysis> {
     {
       headers,
       next: {
-        revalidate: 60,
+        revalidate: 3600,
       },
     },
   );
@@ -212,21 +213,12 @@ export async function deleteAnalysis(analysisId: string) {
 
 export async function updateAnalysis(formData: FormData): Promise<Analysis> {
   const analysisId = formData.get("analysisId") as string;
-  const content = formData.get("content") as string;
-  const group = formData.get("group") as string;
-  const language = formData.get("language") as string;
-
-  // Get the current analysis to preserve existing metadata
-  const currentAnalysis = await getAnalysis(analysisId);
-  const metadata = {
-    ...currentAnalysis.metadata,
-    group: group || undefined,
-    language: language || undefined,
-  };
+  const jsonContent = JSON.parse(formData.get("jsonContent") as string);
+  const metadata = JSON.parse(formData.get("metadata") as string);
 
   const body = {
     analysisId,
-    content,
+    jsonContent,
     metadata,
   };
 
@@ -245,13 +237,29 @@ export async function updateAnalysis(formData: FormData): Promise<Analysis> {
   return await response.json();
 }
 
-export async function listAnalyses(
+export async function listAnalyses({
   pageNum = 1,
   pageSize = 10,
-  metadata?: Record<string, any>,
-): Promise<Analysis[]> {
+  selectFields,
+  textContent,
+  jsonContent,
+  metadata,
+}: {
+  pageNum: number;
+  pageSize: number;
+  selectFields?: string[];
+  textContent?: string;
+  jsonContent?: Content;
+  metadata?: Record<string, any>;
+}): Promise<Analysis[]> {
   let url = `${API_URL}/v1/analyses/list?pageNum=${pageNum}&pageSize=${pageSize}`;
 
+  if (selectFields) {
+    url += `&selectFields=${encodeURIComponent(selectFields.toString())}`;
+  }
+  if (jsonContent) {
+    url += `&jsonContent=${encodeURIComponent(JSON.stringify(jsonContent))}`;
+  }
   if (metadata) {
     url += `&metadata=${encodeURIComponent(JSON.stringify(metadata))}`;
   }
@@ -259,7 +267,7 @@ export async function listAnalyses(
   const response = await fetch(url, {
     headers,
     next: {
-      revalidate: 60,
+      revalidate: 3600,
     },
   });
 
@@ -272,41 +280,34 @@ export async function listAnalyses(
   return await response.json();
 }
 
-export async function listAnalysesIds(
+export async function relatedAnalyses({
+  analysisId,
   pageNum = 1,
   pageSize = 10,
-  metadata?: Record<string, any>,
-): Promise<Analysis[]> {
-  let url = `${API_URL}/v1/analyses/listIds?pageNum=${pageNum}&pageSize=${pageSize}`;
-
-  if (metadata) {
-    url += `&metadata=${encodeURIComponent(JSON.stringify(metadata))}`;
-  }
-
-  const response = await fetch(url, {
-    headers,
-    next: {
-      revalidate: 60,
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error(
-      `Failed to list analyses ids: ${response.headers.get("x-searchlysis-error")}`,
-    );
-  }
-
-  return await response.json();
-}
-
-export async function relatedAnalyses(
-  pageNum = 1,
-  pageSize = 10,
-  analysisId: string,
-  metadata?: Record<string, any>,
-): Promise<Analysis[]> {
+  selectFields,
+  textContent,
+  jsonContent,
+  metadata,
+}: {
+  analysisId: string;
+  pageNum: number;
+  pageSize: number;
+  selectFields?: string[];
+  textContent?: string;
+  jsonContent?: Content;
+  metadata?: Record<string, any>;
+}): Promise<Analysis[]> {
   let url = `${API_URL}/v1/analyses/related?pageNum=${pageNum}&pageSize=${pageSize}&analysisId=${analysisId}`;
 
+  if (selectFields) {
+    url += `&selectFields=${encodeURIComponent(selectFields.toString())}`;
+  }
+  if (textContent) {
+    url += `&textContent=${encodeURIComponent(textContent)}`;
+  }
+  if (jsonContent) {
+    url += `&jsonContent=${encodeURIComponent(JSON.stringify(jsonContent))}`;
+  }
   if (metadata) {
     url += `&metadata=${encodeURIComponent(JSON.stringify(metadata))}`;
   }
@@ -314,7 +315,7 @@ export async function relatedAnalyses(
   const response = await fetch(url, {
     headers,
     next: {
-      revalidate: 60,
+      revalidate: 3600,
     },
   });
 
@@ -327,36 +328,58 @@ export async function relatedAnalyses(
   return await response.json();
 }
 
-export async function getPublishedBlogs(
+export async function getPublishedBlogs({
   pageNum = 1,
   pageSize = 10,
-  group?: string,
-  language?: string,
-): Promise<{ blogs: Analysis[]; total: number }> {
+  selectFields,
+  group,
+  language,
+  tags,
+}: {
+  pageNum: number;
+  pageSize: number;
+  selectFields?: string[];
+  group?: string;
+  language?: string;
+  tags?: string[];
+}): Promise<{ blogs: Analysis[]; total: number }> {
   const metadata = { group, language };
+  const jsonContent = { tags };
 
-  const blogs = await listAnalyses(pageNum, pageSize, metadata);
-  const total = await getTotalBlogs(metadata);
+  const blogs = await listAnalyses({
+    pageNum,
+    pageSize,
+    selectFields,
+    metadata,
+    jsonContent,
+  });
+  const total = await getBlogsCount(metadata, jsonContent);
   return { blogs, total };
 }
 
-async function getTotalBlogs(metadata?: Record<string, any>): Promise<number> {
+async function getBlogsCount(
+  metadata?: Record<string, any>,
+  jsonContent?: Content,
+): Promise<number> {
   let url = `${API_URL}/v1/analyses/count`;
 
   if (metadata) {
-    url += `?metadata=${encodeURIComponent(JSON.stringify(metadata))}`;
+    url += `${url.includes("?") ? "&" : "?"}metadata=${encodeURIComponent(JSON.stringify(metadata))}`;
+  }
+  if (jsonContent) {
+    url += `${url.includes("?") ? "&" : "?"}jsonContent=${encodeURIComponent(JSON.stringify(jsonContent))}`;
   }
 
   const response = await fetch(url, {
     headers,
     next: {
-      revalidate: 60,
+      revalidate: 3600,
     },
   });
 
   if (!response.ok) {
     throw new Error(
-      `Failed to fetch total blogs: ${response.headers.get("x-searchlysis-error")}`,
+      `Failed to fetch total blogs count: ${response.headers.get("x-searchlysis-error")}`,
     );
   }
 
