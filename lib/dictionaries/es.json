@@ -20,7 +20,12 @@
     "previousPost": "Artículo Anterior",
     "nextPost": "Artículo Siguiente",
     "latestPosts": "Artículos más recientes",
-    "relatedPosts": "Artículos relacionados"
+    "relatedPosts": "Artículos relacionados",
+    "tag": "Etiqueta"
+  },
+  "tag":{
+    "title": "Etiqueta",
+    "description": "Descubre artículos relacionados con esta etiqueta."
   },
   "admin": {
     "login": {
@@ -70,6 +75,10 @@
       "title": "Editar Blog",
       "content": "Contenido",
       "group": "Grupo",
+      "groupHelp": "Establezca un grupo para hacer visible el blog en la página de inicio. Si no se establece ningún grupo, el blog no se mostrará en la página de inicio.",
+      "tags": "Etiquetas",
+      "tagsHelp": "Presione Enter para agregar una etiqueta. Haga clic en una etiqueta para eliminarla.",
+      "tagsPlaceholder": "Escriba una etiqueta y presione Enter",
       "save": "Guardar Cambios",
       "saving": "Guardando...",
       "success": "Blog actualizado con éxito",

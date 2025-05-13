@@ -2,6 +2,7 @@
 
 import { Markdown } from "@/components/markdown";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -19,6 +20,7 @@ import type { Analysis } from "@/types/api";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { X } from "lucide-react";
 
 interface BlogEditorProps {
   post: Analysis;
@@ -26,26 +28,38 @@ interface BlogEditorProps {
   dictionary: any;
 }
 
-export function BlogEditor({
-  post,
-  language,
-  dictionary,
-}: BlogEditorProps) {
+export function BlogEditor({ post, language, dictionary }: BlogEditorProps) {
   const [article, setArticle] = useState(post.jsonContent?.article || "");
   const [group, setGroup] = useState(post.metadata?.group || "");
+  const [tags, setTags] = useState<string[]>(post.jsonContent?.tags || []);
+  const [tagInput, setTagInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("edit");
   const router = useRouter();
+
+  const handleTagInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const newTag = tagInput.trim();
+      if (newTag && !tags.includes(newTag)) {
+        setTags([...tags, newTag]);
+        setTagInput("");
+      }
+    }
+  };
+
+  const removeTag = (tagToRemove: string) => {
+    setTags(tags.filter((tag) => tag !== tagToRemove));
+  };
 
   async function handleSubmit(formData: FormData) {
     setIsLoading(true);
 
     try {
-      // Update the form data with the current state values
       formData.set("analysisId", post.analysisId);
       formData.set(
         "jsonContent",
-        JSON.stringify({ ...post.jsonContent, article }),
+        JSON.stringify({ ...post.jsonContent, article, tags }),
       );
       formData.set("metadata", JSON.stringify({ ...post.metadata, group }));
 
@@ -90,6 +104,36 @@ export function BlogEditor({
               <p className="text-sm text-muted-foreground">
                 {dictionary.admin.edit.groupHelp}
               </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="tags">{dictionary.admin.edit.tags}</Label>
+              <div className="space-y-2">
+                <div className="flex flex-wrap gap-2">
+                  {tags.map((tag) => (
+                    <Badge
+                      key={tag}
+                      variant="secondary"
+                      className="cursor-pointer hover:bg-destructive/50"
+                      onClick={() => removeTag(tag)}
+                    >
+                      {tag}
+                      <X className="ml-1 h-3 w-3" />
+                    </Badge>
+                  ))}
+                </div>
+                <Input
+                  id="tags"
+                  value={tagInput}
+                  onChange={(e) => setTagInput(e.target.value)}
+                  onKeyDown={handleTagInputKeyDown}
+                  placeholder={dictionary.admin.edit.tagsPlaceholder}
+                  disabled={isLoading}
+                />
+                <p className="text-sm text-muted-foreground">
+                  {dictionary.admin.edit.tagsHelp}
+                </p>
+              </div>
             </div>
 
             <div className="space-y-2">
