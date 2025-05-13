@@ -15,7 +15,13 @@ interface Props extends Params {
   tag: string;
 }
 
-export default async function TagPage({ params }: { params: Promise<Props> }) {
+export default async function TagPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<Props>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
   try {
     const { language, tag } = await params;
     const [dictionary, isAdmin] = await Promise.all([
@@ -45,7 +51,8 @@ export default async function TagPage({ params }: { params: Promise<Props> }) {
             language={language}
             dictionary={dictionary}
             group={getGroupName()}
-            searchParams={{ tags: [decodedTag] }}
+            tags={[decodedTag]}
+            searchParams={await searchParams}
           />
         </main>
         <SiteFooter />
@@ -59,16 +66,19 @@ export default async function TagPage({ params }: { params: Promise<Props> }) {
 
 export async function generateMetadata({
   params,
+  searchParams,
 }: {
   params: Promise<Props>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }): Promise<Metadata> {
   const { language, tag } = await params;
+  const { page } = await searchParams;
   const dictionary = await getDictionary(language);
   const decodedTag = decodeURIComponent(tag);
   const title = `${decodedTag} - ${process.env.NEXT_PUBLIC_APP_NAME}`;
   const description = `${decodedTag} - ${dictionary.tag.description}`;
   const images = getDefaultImage();
-  const canonical = `${getBaseUrl()}/${language}/tag/${decodedTag}`;
+  const canonical = `${getBaseUrl()}/${language}/tag/${decodedTag}?page=${page}`;
 
   return {
     title,
