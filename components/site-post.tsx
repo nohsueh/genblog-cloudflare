@@ -18,53 +18,63 @@ import { TableOfContents } from "lucide-react";
 import Link from "next/link";
 import ImageWithFallback from "./image-with-fallback";
 
-interface BlogPostProps {
+interface SitePostProps {
   analysisId: string;
   language: Locale;
   dictionary: any;
 }
 
-export async function BlogPost({
+export async function SitePost({
   analysisId,
   language,
   dictionary,
-}: BlogPostProps) {
+}: SitePostProps) {
   const post: Analysis = await getAnalysis(analysisId);
   const { html, headings } = markdownToHtml(post.jsonContent?.article || "");
+  const url = post.analysis.url;
   const image = post.analysis.image || getDefaultImage();
   const favicon = post.analysis.favicon || getDefaultFavicon();
-  const title = post.analysis.title || "";
+  const title = post.analysis.title;
   const tags = post.jsonContent?.tags || [];
 
   return (
     <div className="relative">
       <div className="lg:mr-[calc(48rem-50vw)] 2xl:mr-0">
         <article className="mx-auto max-w-4xl">
-          <div className="mb-6 flex items-start gap-4">
-            <div className="flex w-full items-center gap-2 p-4">
-              <ImageWithFallback
-                src={favicon}
-                width={32}
-                height={32}
-                fallback={getDefaultFavicon()}
-                alt={title}
-                fill
-                className="object-cover"
-              />
-              <h1 className="line-clamp-2 w-full text-3xl font-bold">
-                {title}
-              </h1>
+          <Link
+            href={url}
+            target="_blank"
+            rel="nofolow noopener noreferrer"
+            className="group mb-6 flex flex-col space-y-3 rounded-lg p-4 transition-colors hover:bg-accent/50"
+          >
+            <h1 className="text-xl font-bold text-primary group-hover:text-primary/80 group-hover:underline">
+              {title}
+            </h1>
+            <div className="flex items-center gap-3 text-sm text-muted-foreground">
+              <div className="shrink-0">
+                <ImageWithFallback
+                  src={favicon}
+                  width={20}
+                  height={20}
+                  className="size-5"
+                  fallback={getDefaultFavicon()}
+                  alt={title}
+                />
+              </div>
+              <span className="line-clamp-1 overflow-hidden text-ellipsis">
+                {url}
+              </span>
             </div>
-            <div className="relative aspect-video h-20 overflow-hidden rounded-lg rounded-l-none">
+            <div className="aspect-video max-w-80 overflow-hidden rounded-lg">
               <ImageWithFallback
                 src={image}
                 fallback={getDefaultImage()}
                 alt={title}
-                fill
-                className="object-cover"
+                className="h-full w-full object-cover"
               />
             </div>
-          </div>
+          </Link>
+
           <div className="mb-6 space-y-4">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <span>{formatDate(post.updatedAt, language)}</span>

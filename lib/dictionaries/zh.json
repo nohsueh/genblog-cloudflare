@@ -14,7 +14,6 @@
     "readMore": "阅读更多",
     "publishedOn": "发布于",
     "by": "作者",
-    "backToHome": "返回首页",
     "noBlogs": "没有找到博客文章",
     "tableOfContents": "本页",
     "previousPost": "上一篇",
@@ -26,7 +25,7 @@
   },
   "tag": {
     "title": "标签",
-    "description": "探索与此标签相关的文章。"
+    "description": "探索与此标签相关的内容。"
   },
   "admin": {
     "login": {

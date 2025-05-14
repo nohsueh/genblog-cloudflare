@@ -7,26 +7,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-} from "@/components/ui/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getPublishedBlogs } from "@/lib/actions";
+import { getFilteredAnalyses } from "@/lib/actions";
 import type { Locale } from "@/lib/i18n-config";
 import {
   extractContent,
   formatDate,
   getBaseUrl,
   getDefaultImage,
-  getPaginationRange,
 } from "@/lib/utils";
 import type { Analysis } from "@/types/api";
 import Link from "next/link";
 import { Suspense } from "react";
+import { AnalysesPagination } from "./analyses-pagination";
 import ImageWithFallback from "./image-with-fallback";
 
 const PAGE_SIZE = 12;
@@ -39,7 +32,6 @@ interface BlogListProps {
   searchParams: { [key: string]: string | string[] | undefined };
 }
 
-// 计算标签频率的函数
 function getTagFrequency(blogs: Analysis[]) {
   const tagFreq: { [key: string]: number } = {};
   blogs.forEach((blog) => {
@@ -62,7 +54,7 @@ async function BlogListContent({
 }: BlogListProps) {
   const currentPage = Number(searchParams.page || 1);
 
-  const allBlogs = await getPublishedBlogs({
+  const blogs = await getFilteredAnalyses({
     pageNum: currentPage,
     pageSize: PAGE_SIZE,
     selectFields: ["jsonContent", "analysis", "updatedAt", "analysisId"],
@@ -71,10 +63,10 @@ async function BlogListContent({
     tags,
   });
 
-  const totalCount = allBlogs?.[0]?.totalCount || 0;
-  const tagCloud = getTagFrequency(allBlogs);
+  const totalCount = blogs?.[0]?.totalCount || 0;
+  const tagCloud = getTagFrequency(blogs);
 
-  return allBlogs.length === 0 ? (
+  return blogs.length === 0 ? (
     <div className="py-10 text-center">
       <p className="text-muted-foreground">{dictionary.blog.noBlogs}</p>
     </div>
@@ -84,7 +76,7 @@ async function BlogListContent({
         <div className="mb-8 px-5">
           <h2 className="mb-4 text-xl font-bold">{dictionary.blog.tagCloud}</h2>
           <div className="flex flex-wrap gap-2">
-            {tagCloud.slice(0, 60).map(({ tag, count }) => (
+            {tagCloud.slice(0, 10).map(({ tag, count }) => (
               <Link
                 key={tag}
                 href={`${getBaseUrl()}/${language}/tag/${encodeURIComponent(tag)}`}
@@ -101,9 +93,8 @@ async function BlogListContent({
           </div>
         </div>
       )}
-
-      <div className="grid sm:grid-cols-2 sm:gap-3 lg:grid-cols-3 lg:gap-6">
-        {allBlogs.map((blog) => {
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {blogs.map((blog) => {
           const articleLines = extractContent(blog.jsonContent);
           const title =
             articleLines[0].replace(/^#+\s+|\*+/g, "") ||
@@ -118,7 +109,7 @@ async function BlogListContent({
 
           return (
             <Link
-              href={`${getBaseUrl()}/${language}/${blog.analysisId}/${blog.jsonContent?.slug || ""}`}
+              href={`${getBaseUrl()}/${language}/${blog.analysisId}/${encodeURIComponent(blog.jsonContent?.slug || "")}`}
               key={blog.analysisId}
             >
               <Card className="flex flex-col overflow-hidden border-2 border-transparent transition-colors hover:border-primary/50 focus:border-primary/50 active:border-primary/50 dark:hover:bg-accent/50 dark:focus:bg-accent/50 dark:active:bg-accent/50">
@@ -159,32 +150,11 @@ async function BlogListContent({
           );
         })}
       </div>
-      {totalCount > PAGE_SIZE && (
-        <div className="mt-8 flex justify-center">
-          <Pagination>
-            <PaginationContent>
-              {getPaginationRange(
-                currentPage,
-                Math.ceil(totalCount / PAGE_SIZE),
-              ).map((page, idx) =>
-                page === "..." ? (
-                  <PaginationItem key={`ellipsis-${idx}`}>
-                    <PaginationEllipsis />
-                  </PaginationItem>
-                ) : (
-                  <PaginationItem key={page}>
-                    <Link href={`?page=${page}`}>
-                      <PaginationLink isActive={currentPage === page}>
-                        {page}
-                      </PaginationLink>
-                    </Link>
-                  </PaginationItem>
-                ),
-              )}
-            </PaginationContent>
-          </Pagination>
-        </div>
-      )}
+      <AnalysesPagination
+        currentPage={currentPage}
+        totalCount={totalCount}
+        pageSize={PAGE_SIZE}
+      />
     </div>
   );
 }
@@ -193,8 +163,8 @@ export function BlogList(props: BlogListProps) {
   return (
     <Suspense
       fallback={
-        <div className="grid sm:grid-cols-2 sm:gap-3 lg:grid-cols-3 lg:gap-6">
-          {Array.from({ length: 6 }).map((_, i) => (
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: PAGE_SIZE / 2 }).map((_, i) => (
             <Card key={i} className="overflow-hidden">
               <CardHeader className="p-0">
                 <Skeleton className="aspect-video" />

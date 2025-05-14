@@ -14,7 +14,6 @@
     "readMore": "Weiterlesen",
     "publishedOn": "Veröffentlicht am",
     "by": "von",
-    "backToHome": "Zurück zur Startseite",
     "noBlogs": "Keine Blogs gefunden",
     "tableOfContents": "In dieser Seite",
     "previousPost": "Vorheriger Artikel",
@@ -26,7 +25,7 @@
   },
   "tag": {
     "title": "Tag",
-    "description": "Entdecken Sie Artikel zu diesem Tag."
+    "description": "Entdecken Sie Inhalte zu diesem Tag."
   },
   "admin": {
     "login": {

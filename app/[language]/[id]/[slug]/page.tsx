@@ -1,10 +1,11 @@
 import { BlogPost } from "@/components/blog-post";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { SitePost } from "@/components/site-post";
 import { checkAdminCookie, getAnalysis, validateImage } from "@/lib/actions";
 import { getDictionary } from "@/lib/dictionaries";
 import type { Locale } from "@/lib/i18n-config";
-import { extractContent, getBaseUrl } from "@/lib/utils";
+import { extractContent, getAppType, getBaseUrl } from "@/lib/utils";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -14,7 +15,7 @@ export const revalidate = 3600;
 type Props = {
   language: Locale;
   id: string;
-  slug: String;
+  slug: string;
 };
 
 export default async function BlogPage({ params }: { params: Promise<Props> }) {
@@ -40,11 +41,20 @@ export default async function BlogPage({ params }: { params: Promise<Props> }) {
               </div>
             }
           >
-            <BlogPost
-              analysisId={id}
-              language={language}
-              dictionary={dictionary}
-            />
+            {getAppType() === "blog" && (
+              <BlogPost
+                analysisId={id}
+                language={language}
+                dictionary={dictionary}
+              />
+            )}
+            {getAppType() === "directory" && (
+              <SitePost
+                analysisId={id}
+                language={language}
+                dictionary={dictionary}
+              />
+            )}
           </Suspense>
         </main>
         <SiteFooter />
@@ -75,7 +85,7 @@ export async function generateMetadata({
 
   const images = await validateImage(post.analysis.image || "");
 
-  const canonical = `${getBaseUrl()}/${language}/${id}/${slug}`;
+  const canonical = `${getBaseUrl()}/${language}/${id}/${encodeURIComponent(slug)}`;
 
   return {
     title,
