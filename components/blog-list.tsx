@@ -11,10 +11,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { getFilteredAnalyses } from "@/lib/actions";
 import type { Locale } from "@/lib/i18n-config";
 import {
-  extractContent,
   formatDate,
   getBaseUrl,
-  getDefaultImage,
+  getDefaultImage
 } from "@/lib/utils";
 import type { Analysis } from "@/types/api";
 import Link from "next/link";
@@ -93,16 +92,10 @@ async function BlogListContent({
           </div>
         </div>
       )}
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {blogs.map((blog) => {
-          const articleLines = extractContent(blog.jsonContent);
-          const title =
-            articleLines[0].replace(/^#+\s+|\*+/g, "") ||
-            blog.analysis.title ||
-            "No Title";
-          const description = articleLines
-            ?.slice(1)
-            .find((line) => !line.startsWith("!["));
+          const title = blog.jsonContent?.title || blog.analysis.title;
+          const overview = blog.jsonContent?.overview || "";
           const image = blog.analysis.image || getDefaultImage();
           const author = blog.analysis.author;
           const updatedAt = blog.updatedAt;
@@ -112,7 +105,7 @@ async function BlogListContent({
               href={`${getBaseUrl()}/${language}/${blog.analysisId}/${encodeURIComponent(blog.jsonContent?.slug || "")}`}
               key={blog.analysisId}
             >
-              <Card className="flex flex-col overflow-hidden border-2 border-transparent transition-colors hover:border-primary/50 focus:border-primary/50 active:border-primary/50 dark:hover:bg-accent/50 dark:focus:bg-accent/50 dark:active:bg-accent/50">
+              <Card className="flex flex-col overflow-hidden border-2 border-transparent shadow-md transition-colors hover:border-primary/50 hover:shadow-lg dark:bg-accent/50">
                 <CardHeader className="p-0">
                   <div className="relative aspect-video overflow-hidden">
                     <ImageWithFallback
@@ -130,7 +123,7 @@ async function BlogListContent({
                   </CardTitle>
                   <CardDescription>
                     <h4 className="mb-2 line-clamp-3 break-all text-sm text-muted-foreground">
-                      {description}...
+                      {overview}...
                     </h4>
                   </CardDescription>
                 </CardContent>
@@ -163,7 +156,7 @@ export function BlogList(props: BlogListProps) {
   return (
     <Suspense
       fallback={
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: PAGE_SIZE / 2 }).map((_, i) => (
             <Card key={i} className="overflow-hidden">
               <CardHeader className="p-0">

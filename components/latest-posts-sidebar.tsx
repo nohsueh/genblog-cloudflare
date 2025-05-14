@@ -2,7 +2,7 @@ import { Card, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { listAnalyses } from "@/lib/actions";
 import type { Locale } from "@/lib/i18n-config";
-import { extractContent, getBaseUrl, getGroupName } from "@/lib/utils";
+import { getBaseUrl, getGroupName } from "@/lib/utils";
 import type { Analysis } from "@/types/api";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -62,8 +62,7 @@ async function LatestPostsContent({ language }: { language: Locale }) {
   }
 
   function renderCard(post: Analysis) {
-    const articleLines = extractContent(post.jsonContent);
-    const title = articleLines[0]?.replace(/^#+\s+|\*+/g, "") || "";
+    const title = post.jsonContent?.title || "";
 
     return (
       <Link
@@ -71,7 +70,7 @@ async function LatestPostsContent({ language }: { language: Locale }) {
       >
         <Card
           key={post.analysisId}
-          className="flex flex-row items-center overflow-hidden border-2 border-transparent p-0 transition-colors hover:border-primary/50 focus:border-primary/50 active:border-primary/50 dark:hover:bg-accent/50 dark:focus:bg-accent/50 dark:active:bg-accent/50"
+          className="flex flex-row items-center overflow-hidden border-2 border-transparent p-0 transition-colors hover:border-primary/50 dark:hover:bg-accent/50"
         >
           <CardTitle className="line-clamp-3 p-1 text-xs font-semibold">
             {title}

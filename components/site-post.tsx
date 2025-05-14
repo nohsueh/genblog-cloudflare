@@ -47,7 +47,7 @@ export async function SitePost({
             rel="nofolow noopener noreferrer"
             className="group mb-6 flex flex-col space-y-3 rounded-lg p-4 transition-colors hover:bg-accent/50"
           >
-            <h1 className="text-xl font-bold text-primary group-hover:text-primary/80 group-hover:underline">
+            <h1 className="text-ellipsis text-xl font-bold text-primary group-hover:text-primary/80 group-hover:underline">
               {title}
             </h1>
             <div className="flex items-center gap-3 text-sm text-muted-foreground">
@@ -61,9 +61,7 @@ export async function SitePost({
                   alt={title}
                 />
               </div>
-              <span className="line-clamp-1 overflow-hidden text-ellipsis">
-                {url}
-              </span>
+              <span className="line-clamp-1 text-ellipsis">{url}</span>
             </div>
             <div className="aspect-video max-w-80 overflow-hidden rounded-lg">
               <ImageWithFallback
@@ -74,6 +72,15 @@ export async function SitePost({
               />
             </div>
           </Link>
+
+          <header className="mb-8 space-y-4">
+            <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+              {post.jsonContent?.title}
+            </h1>
+            <p className="text-xl leading-7 text-muted-foreground [&:not(:first-child)]:mt-6">
+              {post.jsonContent?.overview}
+            </p>
+          </header>
 
           <div className="mb-6 space-y-4">
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
