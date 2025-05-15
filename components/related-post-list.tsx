@@ -8,12 +8,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { relatedAnalyses } from "@/lib/actions";
 import type { Locale } from "@/lib/i18n-config";
-import {
-  formatDate,
-  getBaseUrl,
-  getDefaultImage,
-  getGroupName,
-} from "@/lib/utils";
+import { formatDate, getBaseUrl, getDefaultImage, getGroup } from "@/lib/utils";
 import type { Analysis } from "@/types/api";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -83,7 +78,7 @@ async function RelatedBlogListContent({
       pageSize: POSTS_PER_PAGE,
       selectFields: ["analysisId", "analysis", "updatedAt", "jsonContent"],
       metadata: {
-        group: getGroupName(),
+        group: getGroup(),
         language,
       },
     });
@@ -118,10 +113,10 @@ async function RelatedBlogListContent({
             </div>
           </CardHeader>
           <CardContent className="p-4 pb-0">
-            <CardTitle className="mb-2 line-clamp-2 text-base">
+            <CardTitle className="mb-2 line-clamp-2 text-ellipsis text-base">
               {title}
             </CardTitle>
-            <div className="mb-2 line-clamp-3 break-all text-sm text-muted-foreground">
+            <div className="mb-2 line-clamp-3 text-ellipsis text-sm text-muted-foreground">
               {overview}...
             </div>
           </CardContent>

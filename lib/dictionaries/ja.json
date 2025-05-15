@@ -24,7 +24,8 @@
     "latestPosts": "最新の記事",
     "relatedPosts": "関連する記事",
     "tag": "タグ",
-    "tagCloud": "人気のタグ"
+    "tagCloud": "人気のタグ",
+    "tagCloudOnThisPage": "このページの人気のタグ"
   },
   "tag": {
     "title": "タグ",
@@ -77,6 +78,12 @@
     "edit": {
       "title": "ブログを編集",
       "content": "内容",
+      "titleLabel": "タイトル",
+      "titlePlaceholder": "記事のタイトルを入力",
+      "overview": "概要",
+      "overviewPlaceholder": "記事の概要を入力",
+      "brand": "ブランド",
+      "brandPlaceholder": "コンテンツのブランドを入力",
       "group": "グループ",
       "groupHelp": "グループを設定するとホームページにブログが表示されます。グループが設定されていない場合、ホームページに表示されません。",
       "tags": "タグ",

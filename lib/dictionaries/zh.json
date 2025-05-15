@@ -24,7 +24,8 @@
     "latestPosts": "最新文章",
     "relatedPosts": "相关文章",
     "tag": "标签",
-    "tagCloud": "热门标签"
+    "tagCloud": "热门标签",
+    "tagCloudOnThisPage": "本页热门标签"
   },
   "tag": {
     "title": "标签",
@@ -77,6 +78,12 @@
     "edit": {
       "title": "编辑博客",
       "content": "内容",
+      "titleLabel": "标题",
+      "titlePlaceholder": "输入文章标题",
+      "overview": "概述",
+      "overviewPlaceholder": "输入文章概述",
+      "brand": "品牌",
+      "brandPlaceholder": "输入内容品牌",
       "group": "组",
       "groupHelp": "设置组以使博客在首页可见。如果未设置组，博客将不会显示在首页上。",
       "tags": "标签",

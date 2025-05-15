@@ -24,7 +24,8 @@
     "latestPosts": "Artículos más recientes",
     "relatedPosts": "Artículos relacionados",
     "tag": "Etiqueta",
-    "tagCloud": "Etiquetas populares"
+    "tagCloud": "Etiquetas Populares",
+    "tagCloudOnThisPage": "Etiquetas Populares en esta página"
   },
   "tag": {
     "title": "Etiqueta",
@@ -77,6 +78,12 @@
     "edit": {
       "title": "Editar Blog",
       "content": "Contenido",
+      "titleLabel": "Título",
+      "titlePlaceholder": "Ingrese el título del artículo",
+      "overview": "Resumen",
+      "overviewPlaceholder": "Ingrese el resumen del artículo",
+      "brand": "Marca",
+      "brandPlaceholder": "Ingrese la marca del contenido",
       "group": "Grupo",
       "groupHelp": "Establezca un grupo para hacer visible el blog en la página de inicio. Si no se establece ningún grupo, el blog no se mostrará en la página de inicio.",
       "tags": "Etiquetas",

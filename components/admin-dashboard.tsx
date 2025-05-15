@@ -36,7 +36,7 @@ import {
   updateAnalysis,
 } from "@/lib/actions";
 import type { Locale } from "@/lib/i18n-config";
-import { formatDate, getBaseUrl } from "@/lib/utils";
+import { getBaseUrl } from "@/lib/utils";
 import type { Analysis } from "@/types/api";
 import { debounce } from "lodash";
 import { Pencil, Sparkles, Trash } from "lucide-react";
@@ -52,18 +52,18 @@ const PAGE_SIZE = 25;
 interface AdminDashboardProps {
   language: Locale;
   dictionary: any;
-  groupName: string;
+  group: string;
 }
 
 export function AdminDashboard({
   language,
   dictionary,
-  groupName,
+  group,
 }: AdminDashboardProps) {
   const [posts, setPosts] = useState<Analysis[]>([]);
   const [loading, setLoading] = useState(true);
   const [analysisId, setAnalysisId] = useState("");
-  const [selectedGroup, setSelectedGroup] = useState<string>("all");
+  const [selectedGroup, setSelectedGroup] = useState<string>(group);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
 
@@ -77,7 +77,7 @@ export function AdminDashboard({
             "metadata",
             JSON.stringify({
               ...post.metadata,
-              group: post.metadata?.group === groupName ? undefined : groupName,
+              group: post.metadata?.group === group ? undefined : group,
             }),
           );
 
@@ -93,7 +93,7 @@ export function AdminDashboard({
           console.error("Failed to update post visibility:", error);
         }
       }, 500),
-    [groupName, posts, dictionary],
+    [group, posts, dictionary],
   );
 
   useEffect(() => {
@@ -106,18 +106,11 @@ export function AdminDashboard({
     const fetchPosts = async () => {
       try {
         setLoading(true);
-        const group = selectedGroup === groupName ? selectedGroup : undefined;
         const blogs = await getFilteredAnalyses({
           pageNum: currentPage,
           pageSize: PAGE_SIZE,
-          selectFields: [
-            "analysisId",
-            "jsonContent",
-            "metadata",
-            "analysis",
-            "updatedAt",
-          ],
-          group,
+          selectFields: ["analysisId", "jsonContent", "metadata", "updatedAt"],
+          group: selectedGroup === group ? selectedGroup : undefined,
           language: language,
         });
         const totalCount = blogs?.[0]?.totalCount || 0;
@@ -151,7 +144,7 @@ export function AdminDashboard({
     } else {
       fetchPosts();
     }
-  }, [groupName, language, selectedGroup, currentPage, analysisId]);
+  }, [group, language, selectedGroup, currentPage, analysisId]);
 
   const handleDelete = async (currentPost: Analysis) => {
     try {
@@ -198,7 +191,7 @@ export function AdminDashboard({
               <SelectItem value="all">
                 {dictionary.admin.dashboard.allGroups}
               </SelectItem>
-              <SelectItem value={groupName}>{groupName}</SelectItem>
+              <SelectItem value={group}>{group}</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -230,10 +223,10 @@ export function AdminDashboard({
               {posts.map((post) => (
                 <TableRow key={post.analysisId}>
                   <TableCell className="break-all font-medium">
-                    {post.analysis.title || ""}
+                    {post.jsonContent?.title}
                   </TableCell>
                   <TableCell className="text-nowrap">
-                    {formatDate(post.updatedAt, language)}
+                    {new Date(post.updatedAt).toLocaleString()}
                   </TableCell>
                   <TableCell className="text-nowrap">
                     {post.metadata?.group ? (
@@ -246,13 +239,13 @@ export function AdminDashboard({
                     <div className="flex items-center gap-2">
                       <Switch
                         checked={
-                          post.metadata?.group === groupName &&
+                          post.metadata?.group === group &&
                           post.metadata?.language == language
                         }
                         onCheckedChange={() => debouncedToggleVisibility(post)}
                       />
                       <Label>
-                        {post.metadata?.group === groupName &&
+                        {post.metadata?.group === group &&
                         post.metadata?.language == language
                           ? dictionary.admin.dashboard.visible
                           : dictionary.admin.dashboard.hidden}
@@ -261,7 +254,9 @@ export function AdminDashboard({
                   </TableCell>
                   <TableCell>
                     <Link
-                      href={`${getBaseUrl()}/${language}/console/edit/${post.analysisId}`}
+                      href={`${getBaseUrl()}/${language}/console/${post.analysisId}/${encodeURIComponent(
+                        post.jsonContent?.slug || "",
+                      )}`}
                     >
                       <Button size="icon" variant="ghost">
                         <Pencil className="h-4 w-4" />
@@ -285,7 +280,7 @@ export function AdminDashboard({
                             {dictionary.admin.dashboard.confirmDelete}
                           </AlertDialogTitle>
                           <AlertDialogDescription>
-                            {post.analysis.title}
+                            {post.jsonContent?.title}
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>

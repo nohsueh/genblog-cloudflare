@@ -24,7 +24,8 @@
     "latestPosts": "Latest Posts",
     "relatedPosts": "Related Posts",
     "tag": "Tag",
-    "tagCloud": "Popular Tags"
+    "tagCloud": "Popular Tags",
+    "tagCloudOnThisPage": "Popular Tags on this page"
   },
   "tag": {
     "title": "Tag",
@@ -77,6 +78,12 @@
     "edit": {
       "title": "Edit Blog",
       "content": "Content",
+      "titleLabel": "Title",
+      "titlePlaceholder": "Enter article title",
+      "overview": "Overview",
+      "overviewPlaceholder": "Enter article overview",
+      "brand": "Brand",
+      "brandPlaceholder": "Enter content brand",
       "group": "Group",
       "groupHelp": "Set a group to make the blog visible on the homepage. If no group is set, the blog will not be shown on the homepage.",
       "tags": "Tags",

@@ -24,7 +24,8 @@
     "latestPosts": "Articles les plus récents",
     "relatedPosts": "Articles liés",
     "tag": "Étiquette",
-    "tagCloud": "Étiquettes populaires"
+    "tagCloud": "Étiquettes Populaires",
+    "tagCloudOnThisPage": "Étiquettes Populaires sur cette page"
   },
   "tag": {
     "title": "Étiquette",
@@ -77,6 +78,12 @@
     "edit": {
       "title": "Modifier le Blog",
       "content": "Contenu",
+      "titleLabel": "Titre",
+      "titlePlaceholder": "Entrez le titre de l'article",
+      "overview": "Aperçu",
+      "overviewPlaceholder": "Entrez l'aperçu de l'article",
+      "brand": "Marque",
+      "brandPlaceholder": "Entrez la marque du contenu",
       "group": "Groupe",
       "groupHelp": "Définissez un groupe pour rendre le blog visible sur la page d'accueil. Si aucun groupe n'est défini, le blog ne sera pas affiché sur la page d'accueil.",
       "tags": "Étiquettes",

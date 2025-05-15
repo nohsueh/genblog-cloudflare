@@ -10,11 +10,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { getFilteredAnalyses } from "@/lib/actions";
 import type { Locale } from "@/lib/i18n-config";
-import {
-  formatDate,
-  getBaseUrl,
-  getDefaultImage
-} from "@/lib/utils";
+import { formatDate, getBaseUrl, getDefaultImage } from "@/lib/utils";
 import type { Analysis } from "@/types/api";
 import Link from "next/link";
 import { Suspense } from "react";
@@ -73,7 +69,9 @@ async function BlogListContent({
     <div>
       {tagCloud.length > 0 && (
         <div className="mb-8 px-5">
-          <h2 className="mb-4 text-xl font-bold">{dictionary.blog.tagCloud}</h2>
+          <h2 className="mb-4 text-xl font-bold">
+            {dictionary.blog.tagCloudOnThisPage}
+          </h2>
           <div className="flex flex-wrap gap-2">
             {tagCloud.slice(0, 10).map(({ tag, count }) => (
               <Link
@@ -122,8 +120,8 @@ async function BlogListContent({
                     <h3 className="mb-2 line-clamp-2 text-base">{title}</h3>
                   </CardTitle>
                   <CardDescription>
-                    <h4 className="mb-2 line-clamp-3 break-all text-sm text-muted-foreground">
-                      {overview}...
+                    <h4 className="mb-2 line-clamp-3 text-ellipsis text-sm text-muted-foreground">
+                      {overview}
                     </h4>
                   </CardDescription>
                 </CardContent>
