@@ -26,7 +26,7 @@ export default async function sitemap({
       language: locale,
     },
   });
-  const totalCount = analyses[0].totalCount || 0;
+  const totalCount = analyses[0]?.totalCount || 0;
   const pageSize = getAppType() === "blog" ? BLOG_PAGE_SIZE : SITE_PAGE_SIZE;
   const totalPage = Math.ceil(totalCount / pageSize);
 
