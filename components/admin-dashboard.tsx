@@ -36,11 +36,12 @@ import {
   updateAnalysis,
 } from "@/lib/actions";
 import type { Locale } from "@/lib/i18n-config";
-import { getBaseUrl } from "@/lib/utils";
+import { getBaseUrl, getGroup } from "@/lib/utils";
 import type { Analysis } from "@/types/api";
 import { debounce } from "lodash";
 import { Pencil, Sparkles, Trash } from "lucide-react";
 import Link from "next/link";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { AnalysesPagination } from "./analyses-pagination";
@@ -49,22 +50,27 @@ import { Switch } from "./ui/switch";
 
 const PAGE_SIZE = 25;
 
+const ALL_GROUP = "all";
+
 interface AdminDashboardProps {
   language: Locale;
   dictionary: any;
-  group: string;
+  page?: number;
 }
 
 export function AdminDashboard({
   language,
   dictionary,
-  group,
+  page = 1,
 }: AdminDashboardProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const group = searchParams.get("group") || getGroup();
+
   const [posts, setPosts] = useState<Analysis[]>([]);
   const [loading, setLoading] = useState(true);
   const [analysisId, setAnalysisId] = useState("");
-  const [selectedGroup, setSelectedGroup] = useState<string>(group);
-  const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
 
   const debouncedToggleVisibility = React.useMemo(
@@ -106,12 +112,23 @@ export function AdminDashboard({
     const fetchPosts = async () => {
       try {
         setLoading(true);
+
+        let groupValue: string | undefined;
+        switch (group) {
+          case ALL_GROUP:
+            groupValue = undefined;
+            break;
+          default:
+            groupValue = getGroup();
+            break;
+        }
+
         const blogs = await getFilteredAnalyses({
-          pageNum: currentPage,
+          pageNum: page,
           pageSize: PAGE_SIZE,
           selectFields: ["analysisId", "jsonContent", "metadata", "updatedAt"],
-          group: selectedGroup === group ? selectedGroup : undefined,
-          language: language,
+          group: groupValue,
+          language,
         });
         const totalCount = blogs?.[0]?.totalCount || 0;
         setPosts(blogs);
@@ -144,7 +161,7 @@ export function AdminDashboard({
     } else {
       fetchPosts();
     }
-  }, [group, language, selectedGroup, currentPage, analysisId]);
+  }, [group, language, analysisId]);
 
   const handleDelete = async (currentPost: Analysis) => {
     try {
@@ -183,15 +200,24 @@ export function AdminDashboard({
           />
         </div>
         <div className="w-full sm:w-64">
-          <Select value={selectedGroup} onValueChange={setSelectedGroup}>
+          <Select
+            value={group}
+            onValueChange={(value) => {
+              const params = new URLSearchParams(searchParams);
+              params.set("group", value);
+              router.push(
+                `${pathname.split("/").slice(0, -1).join("/")}/1?${params.toString()}`,
+              );
+            }}
+          >
             <SelectTrigger>
               <SelectValue placeholder={dictionary.admin.dashboard.filter} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">
+              <SelectItem value={getGroup()}>{getGroup()}</SelectItem>
+              <SelectItem value={ALL_GROUP}>
                 {dictionary.admin.dashboard.allGroups}
               </SelectItem>
-              <SelectItem value={group}>{group}</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -204,7 +230,7 @@ export function AdminDashboard({
       ) : posts.length === 0 ? (
         <div className="py-10 text-center">
           <p className="text-muted-foreground">
-            {dictionary.admin.dashboard.noBlogs}
+            {dictionary.admin.dashboard.noPosts}
           </p>
         </div>
       ) : (
@@ -254,9 +280,7 @@ export function AdminDashboard({
                   </TableCell>
                   <TableCell>
                     <Link
-                      href={`${getBaseUrl()}/${language}/console/${post.analysisId}/${encodeURIComponent(
-                        post.jsonContent?.slug || "",
-                      )}`}
+                      href={`${getBaseUrl()}/${language}/console/edit/${post.analysisId}`}
                     >
                       <Button size="icon" variant="ghost">
                         <Pencil className="h-4 w-4" />
@@ -297,7 +321,7 @@ export function AdminDashboard({
             </TableBody>
           </Table>
           <AnalysesPagination
-            currentPage={currentPage}
+            currentPage={page}
             totalCount={totalCount}
             pageSize={PAGE_SIZE}
           />
