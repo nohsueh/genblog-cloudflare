@@ -20,10 +20,11 @@ export async function generateStaticParams() {
 
 interface Props extends Params {
   language: string;
+  page: string;
 }
 
 export default async function HomePage({ params }: { params: Promise<Props> }) {
-  const { language } = await params;
+  const { language, page } = await params;
   const dictionary = await getDictionary(language);
   const description =
     process.env.NEXT_PUBLIC_APP_DESCRIPTION ||
@@ -43,6 +44,7 @@ export default async function HomePage({ params }: { params: Promise<Props> }) {
             language={language}
             dictionary={dictionary}
             group={getDefaultGroup()}
+            page={Number(page)}
           />
         )}
         {getAppType() === "directory" && (
@@ -50,6 +52,7 @@ export default async function HomePage({ params }: { params: Promise<Props> }) {
             language={language}
             dictionary={dictionary}
             group={getDefaultGroup()}
+            page={Number(page)}
           />
         )}
       </main>
@@ -63,7 +66,7 @@ export async function generateMetadata({
 }: {
   params: Promise<Props>;
 }): Promise<Metadata> {
-  const { language } = await params;
+  const { language, page } = await params;
   const dictionary = await getDictionary(language);
   const title = process.env.NEXT_PUBLIC_APP_NAME;
   const description =
@@ -71,7 +74,7 @@ export async function generateMetadata({
     `${dictionary.home.title} - ${dictionary.home.description}`;
   const images = getDefaultImage();
 
-  const canonical = `${getBaseUrl()}/${language}`;
+  const canonical = `${getBaseUrl()}/${language}${Number(page) === 1 ? "" : `/page/${page}`}`;
 
   return {
     title,

@@ -4,14 +4,15 @@ import { SiteHeader } from "@/components/site-header";
 import { requireAdmin } from "@/lib/actions";
 import { getDictionary } from "@/lib/dictionaries";
 import type { Locale } from "@/lib/i18n-config";
-import { getGroup } from "@/lib/utils";
+import { getDefaultGroup } from "@/lib/utils";
+import { Metadata } from "next";
 
-export default async function CreateBlogPage(props: {
+export default async function CreateBlogPage({
+  params,
+}: {
   params: Promise<{ language: Locale }>;
 }) {
-  const params = await props.params;
-
-  const { language } = params;
+  const { language } = await params;
 
   // This will redirect if not authenticated
   await requireAdmin(language);
@@ -23,7 +24,7 @@ export default async function CreateBlogPage(props: {
       <SiteHeader language={language} dictionary={dictionary} isAdmin={true} />
       <main className="container mx-auto flex-1 px-4 py-6">
         <BlogCreator
-          group={getGroup()}
+          group={getDefaultGroup()}
           language={language}
           dictionary={dictionary}
         />
@@ -32,3 +33,11 @@ export default async function CreateBlogPage(props: {
     </div>
   );
 }
+
+export const metadata: Metadata = {
+  title: "Edit",
+  robots: {
+    index: false,
+    follow: false,
+  },
+};

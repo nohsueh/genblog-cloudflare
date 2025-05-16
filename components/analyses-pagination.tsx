@@ -8,21 +8,30 @@ import {
   PaginationLink,
 } from "@/components/ui/pagination";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { getPaginationRange } from "@/lib/utils";
+import { getBasePath, getPaginationRange } from "@/lib/utils";
 import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
 
 interface AnalysesPaginationProps {
   currentPage: number;
   totalCount: number;
   pageSize: number;
+  language: string;
 }
 
 export function AnalysesPagination({
   currentPage,
   totalCount,
   pageSize,
+  language,
 }: AnalysesPaginationProps) {
   const isMobile = useIsMobile();
+  const pathname = usePathname();
+  const pagePathname =
+    pathname === `/${language}`
+      ? `${pathname}/page`
+      : pathname.split("/").slice(0, -1).join("/");
+  const searchParams = useSearchParams();
 
   return totalCount > pageSize ? (
     <div className="mt-8 flex justify-center">
@@ -39,7 +48,13 @@ export function AnalysesPagination({
               </PaginationItem>
             ) : (
               <PaginationItem key={page}>
-                <Link href={`?page=${page}`}>
+                <Link
+                  href={{
+                    pathname: `${pagePathname}/${page}`,
+                    query: Object.fromEntries(searchParams.entries()),
+                  }}
+                  passHref
+                >
                   <PaginationLink isActive={currentPage === page}>
                     {page}
                   </PaginationLink>

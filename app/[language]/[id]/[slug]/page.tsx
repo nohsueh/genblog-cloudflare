@@ -2,7 +2,7 @@ import { BlogPost } from "@/components/blog-post";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { SitePost } from "@/components/site-post";
-import { checkAdminCookie, getAnalysis, validateImage } from "@/lib/actions";
+import { getAnalysis, validateImage } from "@/lib/actions";
 import { getDictionary } from "@/lib/dictionaries";
 import type { Locale } from "@/lib/i18n-config";
 import { getAppType, getBaseUrl } from "@/lib/utils";
@@ -12,27 +12,24 @@ import { Suspense } from "react";
 
 export const revalidate = 3600;
 
+export async function generateStaticParams() {
+  return [];
+}
+
 type Props = {
   language: Locale;
   id: string;
   slug: string;
 };
 
-export default async function BlogPage({ params }: { params: Promise<Props> }) {
+export default async function PostPage({ params }: { params: Promise<Props> }) {
   try {
     const { language, id } = await params;
-    const [dictionary, isLoggedIn] = await Promise.all([
-      getDictionary(language),
-      checkAdminCookie(),
-    ]);
+    const dictionary = await getDictionary(language);
 
     return (
       <div className="flex min-h-screen flex-col">
-        <SiteHeader
-          language={language}
-          dictionary={dictionary}
-          isAdmin={isLoggedIn}
-        />
+        <SiteHeader language={language} dictionary={dictionary} />
         <main className="container mb-48 flex-1 px-4 py-6">
           <Suspense
             fallback={
@@ -71,7 +68,7 @@ export async function generateMetadata({
 }: {
   params: Promise<Props>;
 }): Promise<Metadata> {
-  const { id, language } = await params;
+  const { language, id } = await params;
   const post = await getAnalysis(id);
 
   const title =

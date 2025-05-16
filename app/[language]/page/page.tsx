@@ -4,11 +4,10 @@ import { permanentRedirect } from "next/navigation";
 
 interface Props extends Params {
   language: string;
-  tag: string;
 }
 
 export default async function HomePage({ params }: { params: Promise<Props> }) {
-  const { language, tag } = await params;
+  const { language } = await params;
 
-  permanentRedirect(`${getBaseUrl()}/${language}/tag/${tag}/1`);
+  permanentRedirect(`${getBaseUrl()}/${language}/page/1`);
 }

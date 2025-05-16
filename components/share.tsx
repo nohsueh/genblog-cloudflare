@@ -1,13 +1,18 @@
 "use client";
 
+import { getBaseUrl } from "@/lib/utils";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export function Share() {
+  const pathname = usePathname();
+  const currentUrl = `${getBaseUrl()}/${pathname}`;
+
   return (
     <div className="flex items-center gap-3">
       <Link
         href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
-          window.location.href,
+          currentUrl,
         )}`}
         aria-label="Share on X"
         target="_blank"
@@ -23,7 +28,7 @@ export function Share() {
       </Link>
       <Link
         href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
-          window.location.href,
+          currentUrl,
         )}`}
         aria-label="Share on Facebook"
         target="_blank"
@@ -39,7 +44,7 @@ export function Share() {
       </Link>
       <Link
         href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
-          window.location.href,
+          currentUrl,
         )}`}
         aria-label="Share on LinkedIn"
         target="_blank"

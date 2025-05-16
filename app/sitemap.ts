@@ -34,9 +34,6 @@ export default async function sitemap({
     {
       url: `${getBaseUrl()}/${locale}`,
     },
-    ...Array.from({ length: totalPage }).map((_, i) => ({
-      url: `${getBaseUrl()}/${locale}/page/${i + 1}`,
-    })),
     ...analyses.map((analysis) => ({
       url: `${getBaseUrl()}/${locale}/${analysis.analysisId}/${encodeURIComponent(analysis.jsonContent?.slug || "")}`,
     })),
