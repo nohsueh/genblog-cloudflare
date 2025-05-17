@@ -39,15 +39,15 @@ export async function SitePost({
   const tags = post.jsonContent?.tags || [];
 
   return (
-    <div className="relative">
+    <div className="relative mx-auto max-w-screen-lg">
       <div className="lg:mr-[calc(48rem-50vw)] 2xl:mr-0">
-        <article className="mx-auto max-w-4xl">
-          <Link
-            href={url}
-            target="_blank"
-            rel="nofolow noopener"
-            className="group mb-6 flex flex-col space-y-3 rounded-lg p-4 transition-colors hover:bg-accent/50"
-          >
+        <Link
+          href={url}
+          target="_blank"
+          rel="nofolow noopener"
+          className="group mb-6 flex w-full flex-col gap-3 rounded-lg p-4 transition-colors hover:bg-accent/50 md:flex-row md:justify-between"
+        >
+          <div className="flex flex-col space-y-3">
             <h1 className="text-ellipsis text-xl font-bold text-primary group-hover:text-primary/80 group-hover:underline">
               {title}
             </h1>
@@ -64,16 +64,18 @@ export async function SitePost({
               </div>
               <span className="line-clamp-1 text-ellipsis">{url}</span>
             </div>
-            <div className="aspect-video max-w-80 overflow-hidden rounded-lg">
-              <ImageWithFallback
-                src={image}
-                fallback={getDefaultImage()}
-                alt={title}
-                className="h-full w-full object-cover"
-              />
-            </div>
-          </Link>
+          </div>
+          <div className="aspect-video max-w-80 overflow-hidden rounded-lg md:w-80 md:min-w-80">
+            <ImageWithFallback
+              src={image}
+              fallback={getDefaultImage()}
+              alt={title}
+              className="h-full w-full object-cover"
+            />
+          </div>
+        </Link>
 
+        <article className="break-all">
           <header className="mb-6 space-y-4">
             <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
               {post.jsonContent?.title}
@@ -145,6 +147,7 @@ export async function SitePost({
           <LatestPostsSidebar language={language} dictionary={dictionary} />
         </SheetContent>
       </Sheet>
+
       <div className="fixed top-24 hidden w-60 lg:right-4 lg:block 2xl:left-[calc(50vw+32rem)]">
         <OnThisPage headings={headings} />
         <LatestPostsSidebar language={language} dictionary={dictionary} />
