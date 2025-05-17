@@ -27,7 +27,18 @@ export default async function RootLayout(props: RootLayoutProps) {
       <body className={inter.className}>
         {process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT && (
           <Script id="adsense-init" strategy="afterInteractive">
-            {`(adsbygoogle = window.adsbygoogle || []).push({});`}
+            {`
+              try {
+                if (typeof window !== 'undefined' && !window.adsbygoogle) {
+                  window.adsbygoogle = window.adsbygoogle || [];
+                }
+                if (typeof window !== 'undefined' && window.adsbygoogle) {
+                  window.adsbygoogle.push({});
+                }
+              } catch (e) {
+                console.error('AdSense error:', e);
+              }
+            `}
           </Script>
         )}
         <ThemeProvider
