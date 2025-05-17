@@ -9,6 +9,7 @@ import { EllipsisVertical } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Script from "next/script";
 import { useState } from "react";
 import { LanguageToggle } from "./language-toggle";
 import { SiteSearch } from "./site-search";
@@ -30,6 +31,13 @@ export function SiteHeader({
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background">
+      {process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT && (
+        <Script
+          id="adsense-script"
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-${process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT}`}
+          crossOrigin="anonymous"
+        />
+      )}
       <div className="container flex h-16 w-full max-w-5xl items-center space-x-2 md:space-x-4">
         {!isSearching && (
           <div className="flex flex-shrink-0 flex-row items-center md:space-x-2 lg:space-x-6">

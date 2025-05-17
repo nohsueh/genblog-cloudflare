@@ -5,7 +5,6 @@ import { i18n } from "@/lib/i18n-config";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { LoaderCircle } from "lucide-react";
 import { Inter } from "next/font/google";
-import Script from "next/script";
 import type React from "react";
 import { Suspense } from "react";
 
@@ -45,13 +44,6 @@ export default async function RootLayout(props: RootLayoutProps) {
         {process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_MEASUREMENT_ID && (
           <GoogleAnalytics
             gaId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_MEASUREMENT_ID}
-          />
-        )}
-        {process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT && (
-          <Script
-            id="adsense-script"
-            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-${process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT}`}
-            crossOrigin="anonymous"
           />
         )}
       </body>
