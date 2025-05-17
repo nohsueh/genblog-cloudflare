@@ -1,5 +1,6 @@
 import { getDefaultFavicon } from "@/lib/utils";
 import { Metadata } from "next";
+import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -29,6 +30,13 @@ export default function RootLayout({
           <meta
             name="google-site-verification"
             content={process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION}
+          />
+        )}
+        {process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT && (
+          <Script
+            id="adsense-script"
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-${process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT}`}
+            crossOrigin="anonymous"
           />
         )}
       </head>
