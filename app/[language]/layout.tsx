@@ -46,9 +46,9 @@ export default async function RootLayout(props: RootLayoutProps) {
           <Script id="yandex-ads-render">
             {`window.yaContextCb.push(() => {
                 Ya.Context.AdvManager.render({
-                    "blockId": "R-A-15545959-2",
-                    "type": "floorAd",
-                    "platform": "touch"
+                  "blockId": "${process.env.NEXT_PUBLIC_YANDEX_ADUNIT_ID}",
+                  "type": "fullscreen",
+                  "platform": "touch"
                 })
             })`}
           </Script>
