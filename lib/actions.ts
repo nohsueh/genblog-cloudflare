@@ -189,9 +189,6 @@ export async function getAnalysis(analysisId: string): Promise<Analysis> {
     `${API_URL}/v1/analyses?analysisId=${analysisId}`,
     {
       headers,
-      next: {
-        revalidate: 3600,
-      },
     },
   );
 
@@ -218,7 +215,35 @@ export async function deleteAnalysis(analysisId: string) {
   }
 }
 
-export async function updateAnalysis(formData: FormData): Promise<Analysis> {
+export async function updateAnalysis(
+  analysisId: string,
+  jsonContent?: Content,
+  metadata?: Record<string, any>,
+): Promise<Analysis> {
+  const body = {
+    analysisId,
+    ...(jsonContent && { jsonContent }),
+    ...(metadata && { metadata }),
+  };
+
+  const response = await fetch(`${API_URL}/v1/analyses`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `Failed to update analysis: ${response.headers.get("x-searchlysis-error")}`,
+    );
+  }
+
+  return await response.json();
+}
+
+export async function updateAnalysisWithFormData(
+  formData: FormData,
+): Promise<Analysis> {
   const analysisId = formData.get("analysisId") as string;
   const jsonContent = formData.get("jsonContent")
     ? JSON.parse(formData.get("jsonContent") as string)
@@ -282,9 +307,6 @@ export async function listAnalyses({
 
   const response = await fetch(url, {
     headers,
-    next: {
-      revalidate: 3600,
-    },
   });
 
   if (!response.ok) {
@@ -330,9 +352,6 @@ export async function relatedAnalyses({
 
   const response = await fetch(url, {
     headers,
-    next: {
-      revalidate: 3600,
-    },
   });
 
   if (!response.ok) {
