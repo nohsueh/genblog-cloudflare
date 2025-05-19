@@ -39,6 +39,15 @@ export default function RootLayout({
             crossOrigin="anonymous"
           />
         )}
+        {process.env.NEXT_PUBLIC_YANDEX_BLOCK_ID && (
+          <>
+            <Script>{`window.yaContextCb=window.yaContextCb||[]`}</Script>
+            <Script
+              src="https://yandex.ru/ads/system/context.js"
+              async
+            ></Script>
+          </>
+        )}
       </head>
       {children}
     </html>

@@ -121,21 +121,6 @@ export function SiteHeader({
           )}
         </div>
       </div>
-      {process.env.NEXT_PUBLIC_YANDEX_BLOCK_ID && (
-        <>
-          <div
-            id={`yandex_rtb_${process.env.NEXT_PUBLIC_YANDEX_BLOCK_ID}`}
-          ></div>
-          <script>
-            {`window.yaContextCb.push(() => {
-                Ya.Context.AdvManager.render({
-                  "blockId": "${process.env.NEXT_PUBLIC_YANDEX_BLOCK_ID}",
-                  "renderTo": "yandex_rtb_${process.env.NEXT_PUBLIC_YANDEX_BLOCK_ID}"
-                })
-              })`}
-          </script>
-        </>
-      )}
     </header>
   );
 }

@@ -43,13 +43,15 @@ export default async function RootLayout(props: RootLayoutProps) {
           <Toaster richColors />
         </ThemeProvider>
         {process.env.NEXT_PUBLIC_YANDEX_BLOCK_ID && (
-          <>
-            <Script>{`window.yaContextCb=window.yaContextCb||[]`}</Script>
-            <Script
-              src="https://yandex.ru/ads/system/context.js"
-              async
-            ></Script>
-          </>
+          <Script>
+            {`window.yaContextCb.push(() => {
+                Ya.Context.AdvManager.render({
+                    "blockId": "R-A-15545959-2",
+                    "type": "floorAd",
+                    "platform": "touch"
+                })
+            })`}
+          </Script>
         )}
         {process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT && (
           <Script id="adsense-init" strategy="afterInteractive">
