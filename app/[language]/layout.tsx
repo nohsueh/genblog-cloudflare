@@ -42,6 +42,15 @@ export default async function RootLayout(props: RootLayoutProps) {
           </Suspense>
           <Toaster richColors />
         </ThemeProvider>
+        {process.env.NEXT_PUBLIC_YANDEX_BLOCK_ID && (
+          <>
+            <Script>{`window.yaContextCb=window.yaContextCb||[]`}</Script>
+            <Script
+              src="https://yandex.ru/ads/system/context.js"
+              async
+            ></Script>
+          </>
+        )}
         {process.env.NEXT_PUBLIC_GOOGLE_ADSENSE_ACCOUNT && (
           <Script id="adsense-init" strategy="afterInteractive">
             {`(adsbygoogle = window.adsbygoogle || []).push({});`}
