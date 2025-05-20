@@ -48,14 +48,16 @@ export default function ViewCounter({
       }
     };
 
-    const timeoutId = setTimeout(updateViews, 1000 * 5);
+    const timeoutId = setTimeout(updateViews, 0);
     return () => clearTimeout(timeoutId);
   }, [analysisId]);
 
   return (
-    <div className="flex items-center gap-1 text-sm text-muted-foreground">
-      <Eye className="h-4 w-4" />
-      <span>{formatNumber(views)}</span>
-    </div>
+    views > 0 && (
+      <div className="flex items-center gap-1 text-sm text-muted-foreground">
+        <Eye className="h-4 w-4" />
+        <span>{formatNumber(views)}</span>
+      </div>
+    )
   );
 }
