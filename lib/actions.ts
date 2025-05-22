@@ -189,6 +189,28 @@ export async function getAnalysis(analysisId: string): Promise<Analysis> {
     `${API_URL}/v1/analyses?analysisId=${analysisId}`,
     {
       headers,
+      next: {
+        revalidate: 3600,
+      },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      `Failed to get analysis: ${response.headers.get("x-searchlysis-error")}`,
+    );
+  }
+
+  return await response.json();
+}
+
+export async function getAnalysisRealtime(
+  analysisId: string,
+): Promise<Analysis> {
+  const response = await fetch(
+    `${API_URL}/v1/analyses?analysisId=${analysisId}`,
+    {
+      headers,
     },
   );
 
@@ -307,6 +329,9 @@ export async function listAnalyses({
 
   const response = await fetch(url, {
     headers,
+    next: {
+      revalidate: 3600,
+    },
   });
 
   if (!response.ok) {
@@ -352,6 +377,9 @@ export async function relatedAnalyses({
 
   const response = await fetch(url, {
     headers,
+    next: {
+      revalidate: 3600,
+    },
   });
 
   if (!response.ok) {
