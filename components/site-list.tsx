@@ -1,7 +1,6 @@
 import { getFilteredAnalyses } from "@/lib/actions";
 import type { Locale } from "@/lib/i18n-config";
 import { getBaseUrl, getDefaultFavicon } from "@/lib/utils";
-import Head from "next/head";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
