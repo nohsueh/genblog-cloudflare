@@ -45,12 +45,6 @@ async function SiteListContent({
 
   return (
     <div>
-      {sites.length < PAGE_SIZE / 4 && (
-        <Head>
-          <meta name="robots" content="noindex" />
-        </Head>
-      )}
-
       <div className="mb-8 px-5">
         <TagCloud analyses={sites} language={language} />
       </div>
